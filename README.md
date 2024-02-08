@@ -1,0 +1,1 @@
+# Zinrelo Loyalty Integration Cartridge
