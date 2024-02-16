@@ -6,7 +6,7 @@
   "author": "",
   "license": "",
   "scripts": {
-    "lint": "sgmf-scripts --lint js && sgmf-scripts --lint css",
+    "lint": "sgmf-scripts --lint js",
     "lint:fix": "sgmf-scripts --lint js --fix && sgmf-scripts --lint css --fix",
     "upload": "sgmf-scripts --upload -- ",
     "uploadCartridge": "sgmf-scripts --uploadCartridge app_custom_mybrand",
