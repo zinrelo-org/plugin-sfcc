@@ -4,7 +4,7 @@ stages:
 
 perform_build_test:
   stage: perform_build_test
-  image: node:latest
+  image: node:12.22.12
   before_script:
   - npm install
   script:
