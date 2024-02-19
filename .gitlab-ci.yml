@@ -6,11 +6,10 @@ perform_build_test:
   stage: perform_build_test
   image: node:12.22.12
   before_script:
-  - npm install
+  - npm run setupProject
   script:
     - npm run lint
-    - npm run compile:js
-    - npm run compile:scss
+    - npm run build
 
 perform_deployemnt:
     stage: perform_deployemnt

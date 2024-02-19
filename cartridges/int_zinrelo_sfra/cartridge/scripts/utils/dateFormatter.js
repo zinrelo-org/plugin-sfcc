@@ -35,12 +35,12 @@ function formatDate(date, format) {
         const seconds = singleToDoubleDigit(date.getSeconds());
 
         formattedDate = format.toLowerCase()
-                        .replace('yy', year)
-                        .replace('mm', month)
-                        .replace('dd', day)
-                        .replace('hh', hours)
-                        .replace('mn', minutes)
-                        .replace('ss', seconds);
+            .replace('yy', year)
+            .replace('mm', month)
+            .replace('dd', day)
+            .replace('hh', hours)
+            .replace('mn', minutes)
+            .replace('ss', seconds);
     }
 
     return formattedDate;
