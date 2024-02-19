@@ -4,7 +4,7 @@ stages:
 
 perform_build_test:
   stage: perform_build_test
-  image: node:12.22.12
+  image: node:18.19.0
   before_script:
   - npm run setupProject
   script:
