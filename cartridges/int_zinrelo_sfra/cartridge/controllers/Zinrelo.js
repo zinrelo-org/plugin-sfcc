@@ -9,10 +9,10 @@ server.get('UserAuthData', function (req, res, next) {
     var customer = req.currentCustomer;
     var userAuthData = zinreloUserAuthHelpers.getUserAuthData(customer);
 
-    Object.assign(result, {
+    result = {
         success: !!(userAuthData),
         userAuthData: userAuthData
-    });
+    };
 
     res.json(result);
     next();

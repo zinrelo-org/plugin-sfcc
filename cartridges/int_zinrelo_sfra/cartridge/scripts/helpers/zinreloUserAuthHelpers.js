@@ -38,12 +38,12 @@ function getUserAuthData(customer) {
         }
     }
 
-    Object.assign(userAuthData, {
+    userAuthData = {
         partnerID: partnerID,
         jwtToken: jwtToken,
         version: ZINRELO_AUTH_VERSION,
         server: ZINRELO_SERVER_URL
-    });
+    };
 
     return userAuthData;
 }

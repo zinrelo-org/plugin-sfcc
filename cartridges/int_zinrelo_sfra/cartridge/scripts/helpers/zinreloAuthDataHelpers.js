@@ -32,7 +32,7 @@ function generateUserDataForJWT(customer) {
     var userData = {};
 
     if (customer) {
-        Object.assign(userData, {
+        userData = {
             member_id: customer.email,
             email_address: customer.email,
             first_name: customer.firstName,
@@ -42,7 +42,7 @@ function generateUserDataForJWT(customer) {
             custom_attributes: {
                 last_visit_date: dateFormatter.formatDate(customer.lastLoginTime, ZINRELO_DATE_FORMAT)
             }
-        });
+        };
     }
 
     return userData;

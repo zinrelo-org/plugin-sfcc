@@ -46,9 +46,7 @@ function formatDate(date, format) {
     return formattedDate;
 }
 
-Object.assign(base, {
-    formatDate: formatDate,
-    singleToDoubleDigit: singleToDoubleDigit
-});
+base.formatDate = formatDate;
+base.singleToDoubleDigit = singleToDoubleDigit;
 
 module.exports = base;

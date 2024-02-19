@@ -61,16 +61,14 @@ function generateJTWToken(data, secret) {
     const encodedPlayload = convertToBase64(JSON.stringify(payload));
 
     // Create signature
-    const signature = signWithHMACSHA256.digest(`${encodedHeaders}.${encodedPlayload}`, secret);
+    const signature = signWithHMACSHA256.digest(encodedHeaders + '.' + encodedPlayload, secret);
     const encodedSignature = convertToBase64(signature);
 
     // Add them all to create jwt
-    const jwt = `${encodedHeaders}.${encodedPlayload}.${encodedSignature}`;
+    const jwt = encodedHeaders + '.' + encodedPlayload + '.' + encodedSignature;
     return jwt;
 }
 
-Object.assign(base, {
-    generateJTWToken: generateJTWToken
-});
+base.generateJTWToken = generateJTWToken;
 
 module.exports = base;
