@@ -9,9 +9,8 @@ perform_build_test:
   - npm install
   script:
     - npm run lint
-    # - npm run compile:js
-    # - npm run compile:scss
-    # - npm run compile:fonts
+    - npm run compile:js
+    - npm run compile:scss
 
 perform_deployemnt:
     stage: perform_deployemnt
