@@ -12,7 +12,16 @@
     "uploadCartridge": "sgmf-scripts --uploadCartridge app_custom_mybrand",
     "compile:js": "sgmf-scripts --compile js",
     "compile:scss": "sgmf-scripts --compile css",
-    "build": "npm run compile:js;npm run compile:scss;"
+    "build": "npm run compile:js;npm run compile:scss;",
+    "swb:install": "cd sfra-webpack-builder && npm install --legacy-peer-deps",
+    "swb:npm:install": "node ./sfra-webpack-builder/installHandling/install.js",
+    "swb:yarn:install": "node ./sfra-webpack-builder/installHandling/install.js --useYarn",
+    "swb:prod": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env local",
+    "swb:dev": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --env local",
+    "swb:watch": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --watch --env local",
+    "swb:watch:lint": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --env useLinter --watch --env local",
+    "swb:watch:reload": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --watch --env local --env livereload",
+    "setupProject": "npm run swb:install && npm run swb:npm:install && npm run swb:dev"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -42,9 +51,12 @@
   },
   "dependencies": {
     "app-module-path": "^1.0.5",
+    "autoprefixer": "^10.4.17",
     "chai-subset": "^1.6.0",
     "copy-webpack-plugin": "^6.3.2",
     "eslint-plugin-xss": "^0.1.12",
+    "postcss": "^8.4.35",
     "request-promise": "^4.2.6"
-  }
+  },
+  "sfraBuilderConfig": "./sfraBuilderConfig"
 }
