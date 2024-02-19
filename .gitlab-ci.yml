@@ -1,0 +1,26 @@
+stages:
+  - perform_build_test
+  - perform_deployemnt
+
+perform_build_test:
+  stage: perform_build_test
+  image: node:12.22.12
+  before_script:
+  - npm install
+  script:
+    - npm run lint
+    - npm run compile:js
+    - npm run compile:scss
+
+perform_deployemnt:
+    stage: perform_deployemnt
+    image: node:latest
+    before_script:
+      - npm install
+
+    script:
+      node node_modules/.bin/dwupload --hostname $HOSTNAME --username $USERNAME --password "$PASSWORD" --cartridge cartridges/*
+      #mention code version if required
+
+    rules:
+    - if: $CI_COMMIT_BRANCH == "qa-branch"

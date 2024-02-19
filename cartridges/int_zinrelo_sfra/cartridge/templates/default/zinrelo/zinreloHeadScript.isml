@@ -1,0 +1,2 @@
+<script src="//cdn.zinrelo.com/js/all.js"></script>
+<script defer="defer" src="${URLUtils.staticURL('/js/zinrelo.js')}" auth-data-url="${pdict.authDataURL}"></script>
