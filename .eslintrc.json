@@ -5,10 +5,9 @@
         "jquery": true
     },
     "parserOptions": {
-        "sourceType": "module",
         "allowImportExportEverywhere": true,
         "ecmaVersion": 8
-    },
+      },
     "globals": {
         "response": "readonly",
         "session": "readonly",

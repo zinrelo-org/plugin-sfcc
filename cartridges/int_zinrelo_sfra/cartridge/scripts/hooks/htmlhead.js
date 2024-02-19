@@ -1,3 +1,5 @@
+'use strict';
+
 const ISML = require('dw/template/ISML');
 
 /**
