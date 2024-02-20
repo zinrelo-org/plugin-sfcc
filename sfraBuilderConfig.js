@@ -6,13 +6,13 @@ const path = require('path');
  * Allows to configure aliases for you require loading
  */
 module.exports.aliasConfig = {
-  // enter all aliases to configure
+    // enter all aliases to configure
 
     alias: {
         base: path.resolve(
-      process.cwd(), // eslint-disable-next-line max-len
-      './storefront-reference-architecture/cartridges/app_storefront_base/cartridge/client/default/',
-    )
+            process.cwd(), // eslint-disable-next-line max-len
+            './storefront-reference-architecture/cartridges/app_storefront_base/cartridge/client/default/'
+        )
     }
 };
 
@@ -21,8 +21,9 @@ module.exports.aliasConfig = {
  */
 module.exports.copyConfig = {
     './storefront-reference-architecture/cartridges/app_storefront_base': [
-    { from: './storefront-reference-architecture/node_modules/font-awesome/fonts/', to: 'default/fonts' },
-    { from: './storefront-reference-architecture/node_modules/flag-icons/flags', to: 'default/fonts/flags' }
+        { from: './storefront-reference-architecture/node_modules/font-awesome/fonts/', to: 'default/fonts' },
+        { from: './storefront-reference-architecture/node_modules/flag-icons/flags', to: 'default/fonts/flags' },
+        { from: './storefront-reference-architecture/cartridges/app_storefront_base/cartridge/client/default/images', to: 'default/images' }
     ]
 };
 
