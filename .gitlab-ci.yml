@@ -11,15 +11,26 @@ perform_build_test:
     - npm run lint
     - npm run build
 
+  rules:
+  - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
 perform_deployemnt:
     stage: perform_deployemnt
-    image: node:latest
+    image: node:18.19.0
     before_script:
-      - npm install
-
+      - npm run setupProject
     script:
-      node node_modules/.bin/dwupload --hostname $HOSTNAME --username $USERNAME --password "$PASSWORD" --cartridge cartridges/*
-      #mention code version if required
+      - npm run lint
+      - npm run build
+
+      # Create Auth Token
+      - npx sfcc-ci client:auth $CLIENT_ID $SECRET
+      # Zip the cartridges
+      - npm run code:createZip
+      # Deploy code
+      - npx sfcc-ci code:deploy build$CI_COMMIT_SHA.zip -i $HOSTNAME && rm -rf build$CI_COMMIT_SHA.zip
+      # Active current code version
+      - npx sfcc-ci code:activate build$CI_COMMIT_SHA -i $HOSTNAME
 
     rules:
-    - if: $CI_COMMIT_BRANCH == "qa-branch"
+    - if: $CI_COMMIT_BRANCH == "develop"
