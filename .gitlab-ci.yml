@@ -19,6 +19,8 @@ perform_deployment:
     image: node:18.19.0
     before_script:
       - npm run setupProject
+      - apt-get update
+      - apt-get install zip -y
     script:
       - npm run lint
       - npm run build
