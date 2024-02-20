@@ -25,7 +25,7 @@ perform_deployment:
 
       # Create Auth Token
       - npx sfcc-ci client:auth $CLIENT_ID $SECRET
-      - apt-get install zip -y
+
       # Zip the cartridges
       - npm run code:createZip
       # Deploy code
