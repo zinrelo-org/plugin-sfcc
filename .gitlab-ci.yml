@@ -1,6 +1,6 @@
 stages:
   - perform_build_test
-  - perform_deployemnt
+  - perform_deployment
 
 perform_build_test:
   stage: perform_build_test
@@ -14,8 +14,8 @@ perform_build_test:
   rules:
   - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
-perform_deployemnt:
-    stage: perform_deployemnt
+perform_deployment:
+    stage: perform_deployment
     image: node:18.19.0
     before_script:
       - npm run setupProject
