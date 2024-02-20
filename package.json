@@ -22,7 +22,7 @@
         "swb:watch:lint": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --env useLinter --watch --env local",
         "swb:watch:reload": "node ./sfra-webpack-builder/webpackHandling/webpack.js --config ./sfra-webpack-builder/webpack.config.js --env dev --watch --env local --env livereload",
         "setupProject": "npm run swb:install && npm run swb:npm:install",
-        "code:createZip": "mkdir -p build$CI_COMMIT_SHA && cp -R **/cartridges/* build$CI_COMMIT_SHA && zip -r -q build$CI_COMMIT_SHA.zip build$CI_COMMIT_SHA && rm -r build$CI_COMMIT_SHA"
+        "code:createZip": "shx mkdir -p build$CI_COMMIT_SHA && shx cp -R **/cartridges/* build$CI_COMMIT_SHA && zip -r -q build$CI_COMMIT_SHA.zip build$CI_COMMIT_SHA && shx rm -r build$CI_COMMIT_SHA"
     },
     "browserslist": [
         "last 2 versions",
