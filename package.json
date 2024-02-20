@@ -38,6 +38,7 @@
         "sfcc-ci": "^2.11.0",
         "sgmf-scripts": "^3.0.0",
         "stylelint": "^16.2.1",
-        "stylelint-config-standard-scss": "^13.0.0"
+        "stylelint-config-standard-scss": "^13.0.0",
+        "shx": "^0.3.4"
     }
 }
