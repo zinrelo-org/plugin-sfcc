@@ -35,14 +35,21 @@ function generateUserDataForJWT(customer) {
         userData = {
             member_id: customer.email,
             email_address: customer.email,
-            first_name: customer.firstName,
-            last_name: customer.lastName,
+            first_name: customer.firstName || '',
+            last_name: customer.lastName || '',
             birthdate: dateFormatter.formatDate(customer.birthday, ZINRELO_DATE_FORMAT) || '',
-            preferred_language: getCurrentLocaleLanguage(),
+            anniversary_date: dateFormatter.formatDate(customer.custom.anniversaryDateZinrelo, ZINRELO_DATE_FORMAT) || '',
+            preferred_language: customer.custom.zinreloPreferredLanguage || getCurrentLocaleLanguage(),
             custom_attributes: {
-                last_visit_date: dateFormatter.formatDate(customer.lastLoginTime, ZINRELO_DATE_FORMAT)
+                last_visit_date: dateFormatter.formatDate(customer.lastLoginTime, ZINRELO_DATE_FORMAT),
+                external_member_id: customer.customerNo
             }
         };
+
+        // Add user phone number
+        if (customer.custom.isdCode && customer.custom.phoneHome) {
+            userData.phone_number = customer.custom.isdCode + '-' + customer.custom.phoneHome;
+        }
     }
 
     return userData;

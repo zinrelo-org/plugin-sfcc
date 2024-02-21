@@ -16,8 +16,8 @@ function initZinreloDashboard() {
                     var {
                         partnerID, jwtToken, version, server
                     } = response.userAuthData;
-                    window._zrl = window._zrl || [];
 
+                    window._zrl = window._zrl || [];
                     // eslint-disable-next-line no-undef
                     _zrl.push(['init', {
                         partner_id: partnerID,
