@@ -11,7 +11,7 @@ function getPreferredLanguages() {
     var preferredLanguages;
 
     try {
-        preferredLanguages = JSON.parse(currentSite.getCustomPreferenceValue('preferredLanguages') || '{}');
+        preferredLanguages = JSON.parse(currentSite.getCustomPreferenceValue('zinreloPreferredLanguages') || '{}');
     } catch (error) {
         preferredLanguages = {};
     }

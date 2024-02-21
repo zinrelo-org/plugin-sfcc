@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="Profile">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="zinreloAvailablePoints">
+                <display-name xml:lang="x-default">Available Points</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="zinreloLoyaltyTier">
+                <display-name xml:lang="x-default">Loyalty Tier</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="anniversaryDateZinrelo">
+                <display-name xml:lang="x-default">Anniversary Date</display-name>
+                <type>date</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="zinreloPreferredLanguage">
+                <display-name xml:lang="x-default">Preferred Language</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="isdCode">
+                <display-name xml:lang="x-default">ISD Code</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+             <attribute-group group-id="zinrelo">
+                <display-name xml:lang="x-default">Zinrelo</display-name>
+                <attribute attribute-id="zinreloAvailablePoints"/>
+                <attribute attribute-id="zinreloLoyaltyTier"/>
+                <attribute attribute-id="anniversaryDateZinrelo"/>
+                <attribute attribute-id="zinreloPreferredLanguage"/>
+                <attribute attribute-id="isdCode"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
     <type-extension type-id="SitePreferences">
         <custom-attribute-definitions>
             <attribute-definition attribute-id="zinreloAPIKey">
@@ -9,8 +57,16 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="zinreloCartSessionTimeout">
+                <display-name xml:lang="x-default">Cart Session Timeout (In minutes)</display-name>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>30</default-value>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloEnableInCartRedemption">
                 <display-name xml:lang="x-default">Enable In-cart Redemption</display-name>
+                <description xml:lang="x-default">Enable to view loyalty rewards redeem points dropdown.</description>
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
@@ -51,6 +107,14 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>true</default-value>
             </attribute-definition>
+            <attribute-definition attribute-id="zinreloFreeShippingLabel">
+                <display-name xml:lang="x-default">Zinrelo Free Shipping Label</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+                <default-value>Reward</default-value>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloInCartDropdownText">
                 <display-name xml:lang="x-default">In-cart Redemption Dropdown Text</display-name>
                 <type>string</type>
@@ -58,13 +122,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
                 <default-value>You have {{AVAILABLE_POINTS}} points. Select your reward to redeem.</default-value>
-            </attribute-definition>
-            <attribute-definition attribute-id="zinreloInCartRedemptionCancelText">
-                <display-name xml:lang="x-default">In-cart Cancel Button Text</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
             </attribute-definition>
             <attribute-definition attribute-id="zinreloInCartRedemptionText">
                 <display-name xml:lang="x-default">In-cart Redemption Text</display-name>
@@ -88,6 +145,12 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="zinreloPreferredLanguages">
+                <display-name xml:lang="x-default">Preferred Languages</display-name>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloWebhookURL">
                 <display-name xml:lang="x-default">Zinrelo Webhook URL</display-name>
                 <type>string</type>
@@ -106,12 +169,14 @@
                 <attribute attribute-id="zinreloEnableInCartRedemption"/>
                 <attribute attribute-id="zinreloInCartDropdownText"/>
                 <attribute attribute-id="zinreloInCartRedemptionText"/>
-                <attribute attribute-id="zinreloInCartRedemptionCancelText"/>
                 <attribute attribute-id="zinreloEnableRewardsOnPDP"/>
                 <attribute attribute-id="zinreloPDPRewardsText"/>
                 <attribute attribute-id="zinreloEnableOrderCreationEvent"/>
                 <attribute attribute-id="zinreloEnableOrderConfirmationEvent"/>
                 <attribute attribute-id="zinreloEnableReturnOrCancellationEvent"/>
+                <attribute attribute-id="zinreloFreeShippingLabel"/>
+                <attribute attribute-id="zinreloCartSessionTimeout"/>
+                <attribute attribute-id="zinreloPreferredLanguages"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
