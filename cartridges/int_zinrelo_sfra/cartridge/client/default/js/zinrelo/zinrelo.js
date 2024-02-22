@@ -32,10 +32,34 @@ function initZinreloDashboard() {
     }
 }
 
+/**
+ * Renders in cart redemption section in checkout
+ */
+function initInCartRedemption() {
+    var inCartRedemptionURL = $('.inCartRedemptionURL').val();
+    var $inCartRedemptionContainer = $('.inCartRedemptionContainer');
+
+    if ($inCartRedemptionContainer.length > 0 && inCartRedemptionURL) {
+        $.spinner().start();
+        $.ajax({
+            url: inCartRedemptionURL,
+            method: 'GET',
+            success: function (result) {
+                $inCartRedemptionContainer.html(result);
+                $.spinner().stop();
+            },
+            error: function () {
+                $.spinner().stop();
+            }
+        });
+    }
+}
+
 
 module.exports = function (currentScript) {
     script = currentScript;
     return {
-        initZinreloDashboard: initZinreloDashboard
+        initZinreloDashboard: initZinreloDashboard,
+        initInCartRedemption: initInCartRedemption
     };
 };
