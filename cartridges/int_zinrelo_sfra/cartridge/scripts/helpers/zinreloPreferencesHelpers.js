@@ -46,9 +46,40 @@ function isZinreloEnabled() {
     return !!(zinreloEnableLoyalty);
 }
 
+/**
+ * Gets in cart dropdown text from preferences
+ * @returns {string} in cart dropdown text
+ */
+function getInCartDropdownText() {
+    var inCartDropdownText = currentSite.getCustomPreferenceValue('zinreloInCartDropdownText') || '';
+    return inCartDropdownText;
+}
+
+/**
+ * Gets in cart redemption text from preferences
+ * @returns {string} in cart redemption text
+ */
+function getInCartRedemptionText() {
+    var inCartRedemptionText = currentSite.getCustomPreferenceValue('zinreloInCartRedemptionText') || '';
+    return inCartRedemptionText;
+}
+
+/**
+ * Checks whether in cart redemption is enabled in the preferences or not
+ * @returns {boolean} whether in cart redemption is enabled
+ */
+function isInCartRedemptionEnabled() {
+    var inCartRedemptionEnabled = currentSite.getCustomPreferenceValue('zinreloEnableInCartRedemption') || '';
+    return !!(inCartRedemptionEnabled);
+}
+
+
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
     getParnerID: getParnerID,
     getAPIKey: getAPIKey,
-    isZinreloEnabled: isZinreloEnabled
+    isZinreloEnabled: isZinreloEnabled,
+    getInCartDropdownText: getInCartDropdownText,
+    getInCartRedemptionText: getInCartRedemptionText,
+    isInCartRedemptionEnabled: isInCartRedemptionEnabled
 };

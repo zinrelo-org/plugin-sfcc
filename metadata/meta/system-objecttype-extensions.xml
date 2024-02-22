@@ -121,7 +121,6 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
-                <default-value>You have {{AVAILABLE_POINTS}} points. Select your reward to redeem.</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="zinreloInCartRedemptionText">
                 <display-name xml:lang="x-default">In-cart Redemption Text</display-name>
@@ -129,6 +128,7 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+                <default-value>You have {{AVAILABLE_POINTS}} points. Select your reward to redeem.</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="zinreloPDPRewardsText">
                 <display-name xml:lang="x-default">Rewards Points Text On Product Pages</display-name>

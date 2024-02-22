@@ -1,0 +1,28 @@
+<isif condition="${pdict.isInCartRedemptionEnabled && pdict.zinreloRewards && pdict.zinreloRewards.length > 0}">
+    <div class="card">
+        <isif condition="${pdict.inCartRedemptionText}">
+            <div class="card-header">
+                <isprint value="${pdict.inCartRedemptionText}" encoding="on" />
+            </div>
+        </isif>
+        <div class="card-body">    
+            <form class="form">
+                <div class="row">
+                    <div class="col-sm-8">                
+                        <select class="form-control custom-select">
+                            <isif condition="${pdict.inCartDropdownText}">
+                                <option value="">${pdict.inCartDropdownText}</option>
+                            </isif>
+                            <isloop items="${pdict.zinreloRewards}" var="zinreloReward" status="loopstatus">
+                                <option value="${zinreloReward.id}">${zinreloReward.reward_name}</option>
+                            </isloop>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 pl-0">
+                        <button class="btn btn-primary btn-block mt-3 mt-md-0" type="button">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</isif>

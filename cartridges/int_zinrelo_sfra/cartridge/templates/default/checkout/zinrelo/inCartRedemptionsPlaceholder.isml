@@ -1,0 +1,4 @@
+<isif condition="${pdict.customer.registeredUser && pdict.isZinreloEnabled}">
+    <div class="inCartRedemptionContainer"></div>
+    <input type="hidden" class="inCartRedemptionURL" value="${URLUtils.url('Zinrelo-InCartRedemption')}" />
+</isif>
