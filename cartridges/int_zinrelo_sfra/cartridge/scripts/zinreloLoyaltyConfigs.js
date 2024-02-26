@@ -8,7 +8,10 @@
 function getRewardsAPIConfigs(memberID) {
     return {
         endpoint: 'members/' + memberID + '/rewards',
-        method: 'GET'
+        method: 'GET',
+        params: {
+            idParam: 'member_id'
+        }
     };
 }
 
@@ -20,8 +23,37 @@ function getRewardsAPIConfigs(memberID) {
 function getMemberAPIConfigs(memberID) {
     return {
         endpoint: 'members/' + memberID,
-        method: 'GET'
+        method: 'GET',
+        params: {
+            idParam: 'member_id'
+        }
     };
+}
+
+/**
+ * Generate config for get transactions api
+ * @param {string} memberID zinrelo memebr id
+ * @param {Object} options api options
+ * @returns {Object} fetch rewards api configs
+ */
+function getTransactionListAPIConfigs(memberID, options) {
+    var apiConfig = {
+        endpoint: 'members/' + memberID + '/transactions',
+        method: 'GET',
+        params: {
+            idParam: 'member_id'
+        }
+    };
+
+    // Add options if provided
+    if (options) {
+        var { status } = options;
+        if (status && status.length > 0) {
+            apiConfig.params.status = status.length > 1 ? { in: status.join(',') } : { eq: status[0] };
+        }
+    }
+
+    return apiConfig;
 }
 
 /**
@@ -64,5 +96,6 @@ module.exports = {
     getRedeemAPIConfigs: getRedeemAPIConfigs,
     getTransactionApproveAPIConfigs: getTransactionApproveAPIConfigs,
     getTransactionRejectAPIConfigs: getTransactionRejectAPIConfigs,
-    getMemberAPIConfigs: getMemberAPIConfigs
+    getMemberAPIConfigs: getMemberAPIConfigs,
+    getTransactionListAPIConfigs: getTransactionListAPIConfigs
 };
