@@ -35,7 +35,7 @@
                                 <div class="alert alert-success" role="alert">
                                     ${pendingReward.reward_name}
                                 </div>
-                                <input type="hidden" name="zinreloReward" value="${pendingReward.reward_id}" />
+                                <input type="hidden" name="transactionId" value="${pendingReward.transactionId}" />
                             </div>
                             <div class="col-sm-3 pl-0">
                                 <button class="btn btn-secondary btn-block mt-3 mt-md-0" type="submit">${Resource.msg('label.in.cart.cancel.button', 'zinrelo', null)}</button>

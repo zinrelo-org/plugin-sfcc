@@ -16,7 +16,8 @@ function getPendingRewards(pendingTransactionList) {
         pendingTransactionList.forEach(function (pendingTransaction) {
             pendingRewards.push({
                 reward_id: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_id) || '',
-                reward_name: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_name) || ''
+                reward_name: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_name) || '',
+                transactionId: (pendingTransaction && pendingTransaction.id) || ''
             });
         });
     }
@@ -79,7 +80,7 @@ function redeemReward(customer, rewardsForm) {
  */
 function rejectRewardTransaction(customer, rewardsForm) {
     var rewardRedeemOptions = {
-        rewardID: rewardsForm.zinreloReward,
+        transactionId: rewardsForm.transactionId,
         customer: customer && customer.raw && customer.raw.profile
     };
     var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);

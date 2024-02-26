@@ -140,10 +140,10 @@ function getMemberTransactions(customer, transationStatusList) {
  */
 function rejectZinreloRewardTransaction(rejecttionOptions) {
     var result = {};
-    var { customer, rewardID } = rejecttionOptions;
+    var { customer, transactionId } = rejecttionOptions;
 
     if (customer && customer.email) {
-        var memberAPIConfig = getTransactionRejectAPIConfigs(rewardID);
+        var memberAPIConfig = getTransactionRejectAPIConfigs(transactionId);
         var rejectTransactionService = createZinreloLoyaltyService(memberAPIConfig);
 
         var response = rejectTransactionService.call();
