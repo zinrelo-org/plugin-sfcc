@@ -1,5 +1,9 @@
 'use strict';
 
+const Transaction = require('dw/system/Transaction');
+const BasketMgr = require('dw/order/BasketMgr');
+const Resource = require('dw/web/Resource');
+
 const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 const zinreloLoyaltyServiceHelpers = require('*/cartridge/scripts/helpers/zinreloLoyaltyServiceHelpers');
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
@@ -44,17 +48,66 @@ function getInCartRedemptionData(customer) {
         inCartRedemptionText = inCartRedemptionText.replace(/{{AVAILABLE_POINTS}}/g, availablePoints);
 
         // Get available rewards for current customer from zinrelo
-        inCartRedemptionData.zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
+        var zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
+        inCartRedemptionData.zinreloRewards = zinreloRewards;
         inCartRedemptionData.inCartDropdownText = zinreloPreferencesHelpers.getInCartDropdownText();
         inCartRedemptionData.inCartRedemptionText = inCartRedemptionText;
 
         // Get pending transactions for current customer from zinrelo
         var transactionStatusList = [ZINRELO_REWARD_PENDING_STATUS];
         var pendingTransactions = zinreloLoyaltyServiceHelpers.getMemberTransactions(customer.raw.profile, transactionStatusList);
-        inCartRedemptionData.pendingRewards = getPendingRewards(pendingTransactions);
+        var pendingRewards = getPendingRewards(pendingTransactions);
+        inCartRedemptionData.pendingRewards = pendingRewards;
+
+        inCartRedemptionData.showInCartSection = !!((zinreloRewards && zinreloRewards.length > 0) || (pendingRewards && pendingRewards.length > 0));
     }
 
     return inCartRedemptionData;
+}
+
+/**
+ * Applies coupon code to basket
+ * @param {string} couponCode coupon code
+ * @returns {Object} result
+ */
+function applyCouponToCart(couponCode) {
+    var error = false;
+    var errorMessage;
+    var result = {};
+
+    var currentBasket = BasketMgr.getCurrentBasket();
+    if (!currentBasket) {
+        return result;
+    }
+
+    try {
+        Transaction.wrap(function () {
+            return currentBasket.createCouponLineItem(couponCode, true);
+        });
+    } catch (e) {
+        error = true;
+        var errorCodes = {
+            COUPON_CODE_ALREADY_IN_BASKET: 'error.coupon.already.in.cart',
+            COUPON_ALREADY_IN_BASKET: 'error.coupon.cannot.be.combined',
+            COUPON_CODE_ALREADY_REDEEMED: 'error.coupon.already.redeemed',
+            COUPON_CODE_UNKNOWN: 'error.unable.to.add.coupon',
+            COUPON_DISABLED: 'error.unable.to.add.coupon',
+            REDEMPTION_LIMIT_EXCEEDED: 'error.unable.to.add.coupon',
+            TIMEFRAME_REDEMPTION_LIMIT_EXCEEDED: 'error.unable.to.add.coupon',
+            NO_ACTIVE_PROMOTION: 'error.unable.to.add.coupon',
+            default: 'error.unable.to.add.coupon'
+        };
+
+        var errorMessageKey = errorCodes[e.errorCode] || errorCodes.default;
+        errorMessage = Resource.msg(errorMessageKey, 'cart', null);
+    }
+
+    result = {
+        error: error,
+        errorMessage: errorMessage
+    };
+
+    return result;
 }
 
 /**
@@ -69,6 +122,12 @@ function redeemReward(customer, rewardsForm) {
         customer: customer && customer.raw && customer.raw.profile
     };
     var result = zinreloLoyaltyServiceHelpers.redeemZinreloReward(rewardRedeemOptions);
+
+    // Apply coupon code received from zinrelo
+    if (result && result.data && result.data.reward_info && result.data.reward_info.coupon_code) {
+        applyCouponToCart(result.data.reward_info.coupon_code);
+    }
+
     return result;
 }
 

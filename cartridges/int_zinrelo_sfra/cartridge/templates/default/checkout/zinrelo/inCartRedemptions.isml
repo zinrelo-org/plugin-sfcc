@@ -1,5 +1,5 @@
-<isif condition="${pdict.isInCartRedemptionEnabled && pdict.zinreloRewards && pdict.zinreloRewards.length > 0}">
-    <div class="card">
+<isif condition="${pdict.isInCartRedemptionEnabled && pdict.showInCartSection}">
+    <div class="card inCartRedemptionCard">
         <isif condition="${!empty(pdict.inCartRedemptionText)}">
             <div class="card-header">
                 <isprint value="${pdict.inCartRedemptionText}" encoding="on" />

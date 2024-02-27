@@ -101,19 +101,20 @@ function renderInCartRedemptionSection() {
     $('body').on('renderInCartRedemptionSection', function () {
         var inCartRedemptionURL = $('.inCartRedemptionURL').val();
         var $inCartRedemptionContainer = $('.inCartRedemptionContainer');
+        var $spinnerCard = $inCartRedemptionContainer.find('.inCartRedemptionCard');
 
         if ($inCartRedemptionContainer.length > 0 && inCartRedemptionURL) {
-            $.spinner().start();
+            $spinnerCard.spinner().start();
             $.ajax({
                 url: inCartRedemptionURL,
                 method: 'GET',
                 success: function (result) {
                     $inCartRedemptionContainer.html(result);
                     bindEvents();
-                    $.spinner().stop();
+                    $spinnerCard.spinner().stop();
                 },
                 error: function () {
-                    $.spinner().stop();
+                    $spinnerCard.spinner().stop();
                 }
             });
         }
