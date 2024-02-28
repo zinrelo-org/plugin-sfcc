@@ -9,8 +9,6 @@ const zinreloLoyaltyServiceHelpers = require('*/cartridge/scripts/helpers/zinrel
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
 var CartModel = require('*/cartridge/models/cart');
 var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
-var collections = require('*/cartridge/scripts/util/collections');
-var LineItemCtnr = require('dw/order/LineItemCtnr');
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -113,7 +111,7 @@ function applyCouponToCart(couponCode) {
         error: error,
         errorMessage: errorMessage,
         basketModel: new CartModel(currentBasket)
-        
+
     };
 
     return result;
@@ -146,7 +144,7 @@ function removeCouponToCart(couponCode) {
         error: error,
         errorMessage: errorMessage,
         basketModel: new CartModel(currentBasket)
-        
+
     };
 
     return result;
@@ -187,7 +185,7 @@ function rejectRewardTransaction(customer, rewardsForm) {
     };
     var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
 
-    //removing couponLineItem
+    // removing couponLineItem
     if (result && result.data && result.data.reward_info && result.data.reward_info.coupon_code) {
         result.basketModel = removeCouponToCart(result.data.reward_info.coupon_code);
         delete result.data;
