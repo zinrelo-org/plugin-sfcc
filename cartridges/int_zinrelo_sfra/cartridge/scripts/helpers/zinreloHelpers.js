@@ -7,6 +7,10 @@ const Resource = require('dw/web/Resource');
 const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 const zinreloLoyaltyServiceHelpers = require('*/cartridge/scripts/helpers/zinreloLoyaltyServiceHelpers');
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
+var CartModel = require('*/cartridge/models/cart');
+var basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
+var collections = require('*/cartridge/scripts/util/collections');
+var LineItemCtnr = require('dw/order/LineItemCtnr');
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -101,10 +105,48 @@ function applyCouponToCart(couponCode) {
         var errorMessageKey = errorCodes[e.errorCode] || errorCodes.default;
         errorMessage = Resource.msg(errorMessageKey, 'cart', null);
     }
+    Transaction.wrap(function () {
+        basketCalculationHelpers.calculateTotals(currentBasket);
+    });
 
     result = {
         error: error,
-        errorMessage: errorMessage
+        errorMessage: errorMessage,
+        basketModel: new CartModel(currentBasket)
+        
+    };
+
+    return result;
+}
+
+/**
+ * Applies coupon code to basket
+ * @param {string} couponCode coupon code
+ * @returns {Object} result
+ */
+function removeCouponToCart(couponCode) {
+    var error = false;
+    var errorMessage;
+    var result = {};
+
+    var currentBasket = BasketMgr.getCurrentBasket();
+    if (!currentBasket) {
+        return result;
+    }
+    var couponLineItem = currentBasket.getCouponLineItem(couponCode);
+
+    if (couponLineItem) {
+        Transaction.wrap(function () {
+            currentBasket.removeCouponLineItem(couponLineItem);
+            basketCalculationHelpers.calculateTotals(currentBasket);
+        });
+    }
+
+    result = {
+        error: error,
+        errorMessage: errorMessage,
+        basketModel: new CartModel(currentBasket)
+        
     };
 
     return result;
@@ -121,14 +163,15 @@ function redeemReward(customer, rewardsForm) {
         rewardID: rewardsForm.zinreloReward,
         customer: customer && customer.raw && customer.raw.profile
     };
-    var result = zinreloLoyaltyServiceHelpers.redeemZinreloReward(rewardRedeemOptions);
+    var response = zinreloLoyaltyServiceHelpers.redeemZinreloReward(rewardRedeemOptions);
 
     // Apply coupon code received from zinrelo
-    if (result && result.data && result.data.reward_info && result.data.reward_info.coupon_code) {
-        applyCouponToCart(result.data.reward_info.coupon_code);
+    if (response && response.data && response.data.reward_info && response.data.reward_info.coupon_code) {
+        response.basketModel = applyCouponToCart(response.data.reward_info.coupon_code);
+        delete response.data;
     }
 
-    return result;
+    return response;
 }
 
 /**
@@ -143,6 +186,12 @@ function rejectRewardTransaction(customer, rewardsForm) {
         customer: customer && customer.raw && customer.raw.profile
     };
     var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+
+    //removing couponLineItem
+    if (result && result.data && result.data.reward_info && result.data.reward_info.coupon_code) {
+        result.basketModel = removeCouponToCart(result.data.reward_info.coupon_code);
+        delete result.data;
+    }
     return result;
 }
 
