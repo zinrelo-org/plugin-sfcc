@@ -61,6 +61,7 @@ function handleRewardAjax(e) {
             if (result.success) {
                 // Refresh the in-cart redemption section
                 $('body').trigger('renderInCartRedemptionSection');
+                $('body').trigger('couponRedemtion', result.basketModel.basketModel);
             }
         },
         error: function () {
@@ -124,11 +125,39 @@ function renderInCartRedemptionSection() {
     $('body').trigger('renderInCartRedemptionSection');
 }
 
+/**
+ * updates the order total summary in checkout
+ */
+function checkoutTotalsUpdate() {
+    $('body').on('couponRedemtion', function (e, data) {
+        $('.shipping-total-cost').empty().append(data.totals.totalShippingCost);
+        $('.tax-total').empty().append(data.totals.totalTax);
+        $('.grand-total-sum').empty().append(data.totals.grandTotal);
+        $('.sub-total').empty().append(data.totals.subTotal);
+        if (data.totals.orderLevelDiscountTotal.value > 0) {
+            $('.order-discount').removeClass('hide-order-discount');
+            $('.order-discount-total').empty()
+                .append('- ' + data.totals.orderLevelDiscountTotal.formatted);
+        } else {
+            $('.order-discount').addClass('hide-order-discount');
+        }
+
+        if (data.totals.shippingLevelDiscountTotal.value > 0) {
+            $('.shipping-discount').removeClass('hide-shipping-discount');
+            $('.shipping-discount-total').empty().append('- '
+                + data.totals.shippingLevelDiscountTotal.formatted);
+        } else {
+            $('.shipping-discount').addClass('hide-shipping-discount');
+        }
+    });
+}
+
 
 module.exports = function (currentScript) {
     script = currentScript;
     return {
         initZinreloDashboard: initZinreloDashboard,
-        renderInCartRedemptionSection: renderInCartRedemptionSection
+        renderInCartRedemptionSection: renderInCartRedemptionSection,
+        checkoutTotalsUpdate: checkoutTotalsUpdate
     };
 };
