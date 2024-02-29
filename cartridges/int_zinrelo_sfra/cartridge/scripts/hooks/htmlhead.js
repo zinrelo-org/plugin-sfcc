@@ -1,6 +1,7 @@
 'use strict';
 
 const ISML = require('dw/template/ISML');
+const URLUtils = require('dw/web/URLUtils');
 
 /**
  * Implements the html head hook to allow adding global javascript for zinrelo
@@ -8,7 +9,6 @@ const ISML = require('dw/template/ISML');
 function htmlHead() {
     const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
     if (zinreloPreferencesHelpers.isZinreloEnabled()) {
-        const URLUtils = require('dw/web/URLUtils');
         ISML.renderTemplate('zinrelo/zinreloHeadScript', { authDataURL: URLUtils.url('Zinrelo-UserAuthData') });
     }
 }

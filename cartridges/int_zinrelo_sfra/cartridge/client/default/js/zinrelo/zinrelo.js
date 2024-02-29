@@ -61,7 +61,7 @@ function handleRewardAjax(e) {
             if (result.success) {
                 // Refresh the in-cart redemption section
                 $('body').trigger('renderInCartRedemptionSection');
-                $('body').trigger('couponRedemtion', result.basketModel.basketModel);
+                $('body').trigger('couponRedemption', result.basketModel.basketModel);
             }
         },
         error: function () {
@@ -129,7 +129,7 @@ function renderInCartRedemptionSection() {
  * updates the order total summary in checkout
  */
 function checkoutTotalsUpdate() {
-    $('body').on('couponRedemtion', function (e, data) {
+    $('body').on('couponRedemption', function (e, data) {
         $('.shipping-total-cost').empty().append(data.totals.totalShippingCost);
         $('.tax-total').empty().append(data.totals.totalTax);
         $('.grand-total-sum').empty().append(data.totals.grandTotal);
