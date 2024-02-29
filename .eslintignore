@@ -1,0 +1,7 @@
+storefront-reference-architecture/**
+sfra-webpack-builder/**
+
+cartridges/**/cartridge/static/**
+coverage/**
+webpack.config.js
+sfraBuilderConfig.js

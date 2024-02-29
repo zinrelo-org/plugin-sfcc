@@ -1,0 +1,52 @@
+<isif condition="${pdict.isInCartRedemptionEnabled && pdict.showInCartSection}">
+    <div class="card inCartRedemptionCard">
+        <isif condition="${!empty(pdict.inCartRedemptionText)}">
+            <div class="card-header">
+                <isprint value="${pdict.inCartRedemptionText}" encoding="on" />
+            </div>
+        </isif>
+        <div class="card-body">                   
+            <iscomment> Available Rewards to Redeem </iscomment>
+            <form class="form redeemRewardForm" action="${URLUtils.url('Zinrelo-RedeemReward')}" method="POST">
+                <div class="row">
+                    <div class="col-sm-8">                
+                        <select class="form-control custom-select zinreloRewardsDropdown" name="zinreloReward">
+                            <isif condition="${!empty(pdict.inCartDropdownText)}">
+                                <option value="">${pdict.inCartDropdownText}</option>
+                            </isif>
+                            <isloop items="${pdict.zinreloRewards}" var="zinreloReward" status="loopstatus">
+                                <option value="${zinreloReward.reward_id}">${zinreloReward.reward_name}</option>
+                            </isloop>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 pl-0">
+                        <button class="btn btn-primary btn-block mt-3 mt-md-0 redeemZinreloRewardBtn" type="submit">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
+                    </div>
+                </div>
+            </form>
+    
+            <iscomment> Already Pending Rewards </iscomment>
+            <isif condition="${pdict.pendingRewards}">
+                <div class="row mt-3"></div>
+                <isloop items="${pdict.pendingRewards}" var="pendingReward" status="loopstatus">
+                    <form class="form cancleRewardForm" action="${URLUtils.url('Zinrelo-RejectReward')}" method="POST">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="alert alert-success" role="alert">
+                                    ${pendingReward.reward_name}
+                                </div>
+                                <input type="hidden" name="transactionId" value="${pendingReward.transactionId}" />
+                            </div>
+                            <div class="col-sm-3 pl-0">
+                                <button class="btn btn-secondary btn-block mt-3 mt-md-0" type="submit">${Resource.msg('label.in.cart.cancel.button', 'zinrelo', null)}</button>
+                            </div>
+                        </div>
+                    </form>
+                </isloop>
+            </isif>
+
+            <iscomment> CSRF Token </iscomment>
+            <input type="hidden" class="inCartRedemptionCsrfToken" name="${pdict.csrf.tokenName}" value="${pdict.csrf.token}"/>
+        </div>
+    </div>
+</isif>
