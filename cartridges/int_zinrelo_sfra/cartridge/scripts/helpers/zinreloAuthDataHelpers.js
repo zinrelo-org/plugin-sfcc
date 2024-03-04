@@ -3,6 +3,7 @@
 const Locale = require('dw/util/Locale');
 
 const dateFormatter = require('*/cartridge/scripts/utils/dateFormatter');
+const jwtGenerator = require('*/cartridge/scripts/utils/jwtGenerator');
 const { getPreferredLanguages } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 const { ZINRELO_DATE_FORMAT } = require('*/cartridge/scripts/utils/constants');
 
@@ -24,6 +25,15 @@ function getCurrentLocaleLanguage() {
 }
 
 /**
+ * Gets zinrelo member id for customer
+ * @param {dw.customer.Customer} customer customer
+ * @returns {string} zinrelo member id
+ */
+function getZinreloMemberID(customer) {
+    return (customer && customer.email && jwtGenerator.genearteMD5Hash(customer.email)) || '';
+}
+
+/**
  * Generates required data for JWT Token
  * @param {Object} customer user object
  * @returns {Object} user data for JWT
@@ -33,7 +43,7 @@ function generateUserDataForJWT(customer) {
 
     if (customer) {
         userData = {
-            member_id: customer.email,
+            member_id: getZinreloMemberID(customer),
             email_address: customer.email,
             first_name: customer.firstName || '',
             last_name: customer.lastName || '',
@@ -57,5 +67,6 @@ function generateUserDataForJWT(customer) {
 
 module.exports = {
     generateUserDataForJWT: generateUserDataForJWT,
-    getCurrentLocaleLanguage: getCurrentLocaleLanguage
+    getCurrentLocaleLanguage: getCurrentLocaleLanguage,
+    getZinreloMemberID: getZinreloMemberID
 };
