@@ -3,10 +3,10 @@
 var base = module.superModule || {};
 
 const Mac = require('dw/crypto/Mac');
+const WeakMessageDigest = require('dw/crypto/WeakMessageDigest');
 const Encoding = require('dw/crypto/Encoding');
 const Bytes = require('dw/util/Bytes');
 const jwtValidityInSeconds = 3600;
-
 
 /**
  * Converts to base64 url encoded format
@@ -69,6 +69,25 @@ function generateJTWToken(data, secret) {
     return jwt;
 }
 
+/**
+ * Generates hash for provided string using MD5 Algorithm
+ * @param {string} text message to be hashed
+ * @returns {string} hash
+ */
+function genearteMD5Hash(text) {
+    var hash = '';
+
+    if (text) {
+        const messageDigest5 = new WeakMessageDigest(WeakMessageDigest.DIGEST_MD5);
+        var textToBytes = new Bytes(text);
+        var digestedBytes = messageDigest5.digestBytes(textToBytes);
+        hash = Encoding.toHex(digestedBytes);
+    }
+
+    return hash;
+}
+
 base.generateJTWToken = generateJTWToken;
+base.genearteMD5Hash = genearteMD5Hash;
 
 module.exports = base;

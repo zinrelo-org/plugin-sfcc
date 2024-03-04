@@ -4,6 +4,7 @@ const URLUtils = require('dw/web/URLUtils');
 const BasketMgr = require('dw/order/BasketMgr');
 
 const collections = require('*/cartridge/scripts/util/collections');
+const zinreloUserAuthHelpers = require('*/cartridge/scripts/helpers/zinreloAuthDataHelpers');
 const { createZinreloLoyaltyService } = require('*/cartridge/scripts/services/zinreloLoyaltyServices');
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
 const {
@@ -37,7 +38,8 @@ function getRewards(customer) {
     var rewards = [];
 
     if (customer && customer.email) {
-        var rewardsAPIConfig = getRewardsAPIConfigs(customer.email);
+        var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
+        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID);
         var loyaltyRewardsService = createZinreloLoyaltyService(rewardsAPIConfig);
 
         // Prepare payload
@@ -67,7 +69,8 @@ function getMemberData(customer) {
     var memberData = {};
 
     if (customer && customer.email) {
-        var memberAPIConfig = getMemberAPIConfigs(customer.email);
+        var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
+        var memberAPIConfig = getMemberAPIConfigs(zinreloMemberID);
         var loyaltyMemberService = createZinreloLoyaltyService(memberAPIConfig);
         var response = loyaltyMemberService.call();
         if (response && response.object) {
@@ -91,11 +94,12 @@ function redeemZinreloReward(redemptionOptions) {
     if (customer && customer.email) {
         var memberAPIConfig = getRedeemAPIConfigs();
         var loyaltyMemberService = createZinreloLoyaltyService(memberAPIConfig);
+        var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
 
         // Prepare payload
         var body = {
             reward_id: rewardID,
-            member_id: customer.email,
+            member_id: zinreloMemberID,
             status: ZINRELO_REWARD_PENDING_STATUS
         };
 
@@ -120,7 +124,8 @@ function getMemberTransactions(customer, transationStatusList) {
 
     if (customer && customer.email) {
         var options = { status: transationStatusList };
-        var transactionListAPIConfigs = getTransactionListAPIConfigs(customer.email, options);
+        var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
+        var transactionListAPIConfigs = getTransactionListAPIConfigs(zinreloMemberID, options);
         var transactionListService = createZinreloLoyaltyService(transactionListAPIConfigs);
         var response = transactionListService.call();
 
