@@ -105,7 +105,6 @@ function removeFromZinreloCustomerGroup(rewardID) {
 /**
  * Applies coupon code to basket
  * @param {Object} rewardInfo reward info object
- * @param {string} rewardID reward ID
  * @returns {Object} result
  */
 function applyCouponToCart(rewardInfo) {
