@@ -49,17 +49,8 @@ function getInCartRedemptionData(customer) {
         var availablePoints = (memberData && memberData.availablePoints) || 0;
         inCartRedemptionText = inCartRedemptionText.replace(/{{AVAILABLE_POINTS}}/g, availablePoints);
 
-        var zinreloRedeemedRewards = session.custom.applicableZinreloRewards || '';
-        var zinreloRewardsList = zinreloRedeemedRewards.split(',');
-
         // Get available rewards for current customer from zinrelo
         var zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
-        for (let index = 0; index < zinreloRewards.length; index += 1) {
-            if (zinreloRewardsList.indexOf(zinreloRewards[index].reward_id) >= 0) {
-                zinreloRewards.splice(index, 1);
-            }
-        }
-
         inCartRedemptionData.zinreloRewards = zinreloRewards;
         inCartRedemptionData.inCartDropdownText = zinreloPreferencesHelpers.getInCartDropdownText();
         inCartRedemptionData.inCartRedemptionText = inCartRedemptionText;
@@ -117,7 +108,7 @@ function removeFromZinreloCustomerGroup(rewardID) {
  * @param {string} rewardID reward ID
  * @returns {Object} result
  */
-function applyCouponToCart(rewardInfo, rewardID) {
+function applyCouponToCart(rewardInfo) {
     var error = false;
     var errorMessage;
     var result = {};
@@ -132,7 +123,7 @@ function applyCouponToCart(rewardInfo, rewardID) {
         Transaction.wrap(function () {
             var couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
             couponLineItem.custom.isZinreloCoupon = true;
-            couponLineItem.custom.rewardID = rewardID;
+            couponLineItem.custom.rewardID = rewardInfo.reward_id;
         });
     } catch (e) {
         removeFromZinreloCustomerGroup(rewardInfo.reward_id);
@@ -216,7 +207,7 @@ function redeemReward(customer, rewardsForm) {
 
     // Apply coupon code received from zinrelo
     if (response && response.data && response.data.reward_info && response.data.reward_info.coupon_code) {
-        response.basketModel = applyCouponToCart(response.data.reward_info, response.data.reward_info.reward_id);
+        response.basketModel = applyCouponToCart(response.data.reward_info);
         delete response.data;
     }
 
