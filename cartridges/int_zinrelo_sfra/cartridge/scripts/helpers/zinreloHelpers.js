@@ -122,6 +122,7 @@ function applyCouponToCart(rewardInfo) {
         Transaction.wrap(function () {
             var couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
             couponLineItem.custom.isZinreloCoupon = true;
+            couponLineItem.custom.rewardID = rewardInfo.reward_id;
         });
     } catch (e) {
         removeFromZinreloCustomerGroup(rewardInfo.reward_id);

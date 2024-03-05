@@ -57,6 +57,15 @@ function getRewards(customer) {
         }
     }
 
+    var zinreloRedeemedRewards = session.custom.applicableZinreloRewards || '';
+    var zinreloRewardsList = zinreloRedeemedRewards.split(',');
+    // Get available rewards for current customer from zinrelo
+    for (let index = 0; index < rewards.length; index += 1) {
+        if (zinreloRewardsList.indexOf(rewards[index].reward_id) >= 0) {
+            rewards.splice(index, 1);
+        }
+    }
+
     return rewards;
 }
 

@@ -149,6 +149,20 @@ function checkoutTotalsUpdate() {
         } else {
             $('.shipping-discount').addClass('hide-shipping-discount');
         }
+
+        data.items.forEach(function (item) {
+            if (data.totals.orderLevelDiscountTotal.value > 0) {
+                $('.coupons-and-promos').empty().append(data.totals.discountsHtml);
+            }
+            if (item.renderedPromotions) {
+                $('.item-' + item.UUID).empty().append(item.renderedPromotions);
+            } else {
+                $('.item-' + item.UUID).empty();
+            }
+            $('.uuid-' + item.UUID + ' .unit-price').empty().append(item.renderedPrice);
+            $('.line-item-price-' + item.UUID + ' .unit-price').empty().append(item.renderedPrice);
+            $('.item-total-' + item.UUID).empty().append(item.priceTotal.renderedPrice);
+        });
     });
 }
 
