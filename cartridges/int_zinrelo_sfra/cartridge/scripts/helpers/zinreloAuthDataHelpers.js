@@ -3,7 +3,6 @@
 const Locale = require('dw/util/Locale');
 
 const dateFormatter = require('*/cartridge/scripts/utils/dateFormatter');
-const jwtGenerator = require('*/cartridge/scripts/utils/jwtGenerator');
 const { getPreferredLanguages } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 const { ZINRELO_DATE_FORMAT } = require('*/cartridge/scripts/utils/constants');
 
@@ -30,7 +29,7 @@ function getCurrentLocaleLanguage() {
  * @returns {string} zinrelo member id
  */
 function getZinreloMemberID(customer) {
-    return (customer && customer.email && jwtGenerator.genearteMD5Hash(customer.email)) || '';
+    return (customer && customer.email) || '';
 }
 
 /**
