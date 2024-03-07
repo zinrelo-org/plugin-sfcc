@@ -7,23 +7,25 @@
         </isif>
         <div class="card-body">                   
             <iscomment> Available Rewards to Redeem </iscomment>
-            <form class="form redeemRewardForm" action="${URLUtils.url('Zinrelo-RedeemReward')}" method="POST">
-                <div class="row">
-                    <div class="col-sm-8">                
-                        <select class="form-control custom-select zinreloRewardsDropdown" name="zinreloReward">
-                            <isif condition="${!empty(pdict.inCartDropdownText)}">
-                                <option value="">${pdict.inCartDropdownText}</option>
-                            </isif>
-                            <isloop items="${pdict.zinreloRewards}" var="zinreloReward" status="loopstatus">
-                                <option value="${zinreloReward.reward_id}">${zinreloReward.reward_name}</option>
-                            </isloop>
-                        </select>
+            <isif condition="${pdict.zinreloRewards && pdict.zinreloRewards.length > 0}">     
+                <form class="form redeemRewardForm" action="${URLUtils.url('Zinrelo-RedeemReward')}" method="POST">
+                    <div class="row">
+                        <div class="col-sm-8">                
+                            <select class="form-control custom-select zinreloRewardsDropdown" name="zinreloReward">
+                                <isif condition="${!empty(pdict.inCartDropdownText)}">
+                                    <option value="">${pdict.inCartDropdownText}</option>
+                                </isif>
+                                <isloop items="${pdict.zinreloRewards}" var="zinreloReward" status="loopstatus">
+                                    <option value="${zinreloReward.reward_id}">${zinreloReward.reward_name}</option>
+                                </isloop>
+                            </select>
+                        </div>
+                        <div class="col-sm-4 pl-0">
+                            <button class="btn btn-primary btn-block mt-3 mt-md-0 redeemZinreloRewardBtn" type="submit">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
+                        </div>
                     </div>
-                    <div class="col-sm-4 pl-0">
-                        <button class="btn btn-primary btn-block mt-3 mt-md-0 redeemZinreloRewardBtn" type="submit">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </isif>
     
             <iscomment> Already Pending Rewards </iscomment>
             <isif condition="${pdict.pendingRewards}">

@@ -8,7 +8,7 @@ const zinreloUserAuthHelpers = require('*/cartridge/scripts/helpers/zinreloAuthD
 const { createZinreloLoyaltyService } = require('*/cartridge/scripts/services/zinreloLoyaltyServices');
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
 const {
-    getRewardsAPIConfigs, getMemberAPIConfigs, getRedeemAPIConfigs, getTransactionListAPIConfigs, getTransactionRejectAPIConfigs
+    getRewardsAPIConfigs, getMemberAPIConfigs, getRedeemAPIConfigs, getTransactionListAPIConfigs, getTransactionRejectAPIConfigs, getTransactionApproveAPIConfigs
 } = require('*/cartridge/scripts/zinreloLoyaltyConfigs');
 
 /**
@@ -157,10 +157,32 @@ function rejectZinreloRewardTransaction(rejecttionOptions) {
     var { customer, transactionId } = rejecttionOptions;
 
     if (customer && customer.email) {
-        var memberAPIConfig = getTransactionRejectAPIConfigs(transactionId);
-        var rejectTransactionService = createZinreloLoyaltyService(memberAPIConfig);
+        var transactionRejectAPIConfigs = getTransactionRejectAPIConfigs(transactionId);
+        var rejectTransactionService = createZinreloLoyaltyService(transactionRejectAPIConfigs);
 
         var response = rejectTransactionService.call();
+        if (response && response.object) {
+            result = JSON.parse(response.object);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Approve transaction request to zinrelo
+ * @param {Object} transactionApproveOptions transaction approve options
+ * @returns {Object} result
+ */
+function approveZinreloRewardTransaction(transactionApproveOptions) {
+    var result = {};
+    var { customer, transactionId } = transactionApproveOptions;
+
+    if (customer && customer.email) {
+        var transactionApproveAPIConfigs = getTransactionApproveAPIConfigs(transactionId);
+        var approveTransactionService = createZinreloLoyaltyService(transactionApproveAPIConfigs);
+
+        var response = approveTransactionService.call();
         if (response && response.object) {
             result = JSON.parse(response.object);
         }
@@ -174,5 +196,6 @@ module.exports = {
     getMemberData: getMemberData,
     redeemZinreloReward: redeemZinreloReward,
     getMemberTransactions: getMemberTransactions,
-    rejectZinreloRewardTransaction: rejectZinreloRewardTransaction
+    rejectZinreloRewardTransaction: rejectZinreloRewardTransaction,
+    approveZinreloRewardTransaction: approveZinreloRewardTransaction
 };
