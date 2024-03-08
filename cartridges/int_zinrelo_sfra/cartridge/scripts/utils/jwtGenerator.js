@@ -40,7 +40,7 @@ function convertToBase64(string) {
  * Generates JWT token
  * @param {Object} data payload data for jwt
  * @param {string} secret secret to sign the token
- * @returns {string} JWT Token
+  * @returns {string} JWT Token
  */
 function generateJTWToken(data, secret) {
     const currentTime = new Date();
@@ -87,7 +87,22 @@ function genearteMD5Hash(text) {
     return hash;
 }
 
+/**
+ * Generates JWT token
+ * @param {Object} string for creating signature
+ * @param {string} secret secret to sign the token
+ * @param {Object} hashingAlgorithm algorthim required for hashing
+ * @returns {string} Encoded Signature
+ */
+function createSignature(string, secret, hashingAlgorithm) {
+    const signWithHMAC = new Mac(Mac[hashingAlgorithm.algorthimCode]);
+    const signature = signWithHMAC.digest(string, secret);
+    const encodedSignature = Encoding.toHex(signature);
+    return encodedSignature;
+}
+
 base.generateJTWToken = generateJTWToken;
+base.createSignature = createSignature;
 base.genearteMD5Hash = genearteMD5Hash;
 
 module.exports = base;
