@@ -185,9 +185,10 @@ function removeFromZinreloCustomerGroup(rewardID) {
 /**
  * Applies coupon code to basket
  * @param {Object} rewardInfo reward info object
+ * @param {string} transactionId zinrelo transaction id
  * @returns {Object} result
  */
-function applyCouponToCart(rewardInfo) {
+function applyCouponToCart(rewardInfo, transactionId) {
     var error = false;
     var errorMessage;
     var result = {};
@@ -203,6 +204,7 @@ function applyCouponToCart(rewardInfo) {
             var couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
             couponLineItem.custom.isZinreloCoupon = true;
             couponLineItem.custom.zinreloRewardID = rewardInfo.reward_id;
+            couponLineItem.custom.zinreloTransactionId = transactionId || '';
         });
     } catch (e) {
         removeFromZinreloCustomerGroup(rewardInfo.reward_id);
@@ -250,11 +252,11 @@ function removeCouponToCart(rewardInfo) {
     if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
         return result;
     }
+
+    removeFromZinreloCustomerGroup(rewardInfo.reward_id);
     var couponLineItem = currentBasket.getCouponLineItem(rewardInfo.coupon_code);
 
     if (couponLineItem) {
-        removeFromZinreloCustomerGroup(rewardInfo.reward_id);
-        session.custom.zinreloRewardsID = '';
         Transaction.wrap(function () {
             currentBasket.removeCouponLineItem(couponLineItem);
             basketCalculationHelpers.calculateTotals(currentBasket);
@@ -286,7 +288,7 @@ function redeemReward(customer, rewardsForm) {
 
     // Apply coupon code received from zinrelo
     if (response && response.data && response.data.reward_info && response.data.reward_info.coupon_code) {
-        response.basketModel = applyCouponToCart(response.data.reward_info);
+        response.basketModel = applyCouponToCart(response.data.reward_info, response.data.id);
 
         if (response && response.basketModel && response.basketModel.error) {
             // TODO: reject reward in zinrelo
