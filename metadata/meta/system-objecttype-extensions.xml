@@ -16,6 +16,76 @@
             </attribute-group>
         </group-definitions>
     </type-extension>
+    <type-extension type-id="Order">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="orderStatus">
+                <display-name xml:lang="x-default">Order Status</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">Shipped</display>
+                        <value>shipped</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Returned</display>
+                        <value>returned</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Partially Returned</display>
+                        <value>partiallyReturned</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="zinreloOrderStatus">
+                <display-name xml:lang="x-default">Zinrelo Order Status</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">Created</display>
+                        <value>created</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Confirmed</display>
+                        <value>confirmed</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Paid</display>
+                        <value>paid</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Shipped</display>
+                        <value>shipped</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Returned</display>
+                        <value>returned</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Cancelled</display>
+                        <value>cancelled</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">partiallyReturned</display>
+                        <value>partiallyReturned</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="orderStatus">
+                <display-name xml:lang="x-default">Order Status</display-name>
+                <attribute attribute-id="orderStatus"/>
+            </attribute-group>
+            <attribute-group group-id="zinreloOrderStatus">
+                <display-name xml:lang="x-default">Zinrelo Order Status</display-name>
+                <attribute attribute-id="zinreloOrderStatus"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
     <type-extension type-id="Profile">
         <custom-attribute-definitions>
             <attribute-definition attribute-id="zinreloAvailablePoints">
