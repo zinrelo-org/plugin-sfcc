@@ -9,6 +9,7 @@ const OrderMgr = require('dw/order/OrderMgr');
 const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 const zinreloLoyaltyServiceHelpers = require('*/cartridge/scripts/helpers/zinreloLoyaltyServiceHelpers');
 const basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
+const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceHelpers');
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
 const { ZINRELO_REWARD_PENDING_STATUS, ZINRELO_TRANSACTION_REDEEMED_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
@@ -314,8 +315,14 @@ function rejectRewardTransaction(customer, rewardsForm) {
     var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
 
     // removing couponLineItem
-    if (result && result.data && result.data.reward_info && result.data.reward_info) {
+    if (result && result.data && result.data.reward_info && result.data.reward_info.coupon_code) {
         result.basketModel = removeCouponToCart(result.data.reward_info);
+
+        // Delete coupon from BM
+        var couponList = [result.data.reward_info.coupon_code];
+        couponServiceHelpers.deleteCoupon(couponList);
+
+        // Remove data from the reponse
         delete result.data;
     }
     return result;
