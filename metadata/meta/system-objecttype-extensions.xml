@@ -25,6 +25,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="rewardInfo">
+                <display-name xml:lang="x-default">rewardInfo</display-name>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloLoyaltyTier">
                 <display-name xml:lang="x-default">Loyalty Tier</display-name>
                 <type>string</type>
