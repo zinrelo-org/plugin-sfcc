@@ -3,6 +3,10 @@
         {
             "name": "app.template.htmlHead",
             "script": "./cartridge/scripts/hooks/htmlhead.js"
+        },
+        {
+            "name": "dw.ocapi.shop.order_search.modifyPOSTResponse",
+            "script": "./cartridge/scripts/hooks/orders/modifyOrderPostResponse.js"
         }
     ]
 }
