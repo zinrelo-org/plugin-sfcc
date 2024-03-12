@@ -118,12 +118,20 @@ function setRewardToProfile(rewardInfo, transactionID) {
     };
 
     var profileReward = request.session.customer.profile.getCustom().rewardInfo;
-    Transaction.wrap(function () {
-        if (!profileReward) {
-            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(rewardData);
-        } else {
-            request.session.customer.profile.getCustom().rewardInfo = request.session.customer.profile.getCustom().rewardInfo + ';' + JSON.stringify(rewardData);
+
+    if (profileReward) {
+        try {
+            profileReward = JSON.parse(profileReward);
+        } catch (error) {
+            profileReward = [];
         }
+    } else {
+        profileReward = [];
+    }
+
+    Transaction.wrap(function () {
+        profileReward.push(rewardData);
+        request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
     });
 }
 
@@ -135,19 +143,16 @@ function removeRewardsFromProfile(rewardInfo) {
     var profileReward = request.session.customer.profile.getCustom().rewardInfo;
 
     if (profileReward) {
-        var profileRewardList = profileReward.split(';');
-        profileReward = '';
-        for (let index = 0; index < profileRewardList.length; index += 1) {
-            var reward = JSON.parse(profileRewardList[index]);
-            if (reward.reward_id !== rewardInfo.reward_id) {
-                if (index !== 0) {
-                    profileReward += ';';
-                }
-                profileReward += JSON.stringify(reward);
+        var profileRewardList = JSON.parse(profileReward);
+
+        profileRewardList.forEach(function (reward, index) {
+            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id) {
+                profileRewardList.splice(index, 1);
             }
-        }
+        });
+
         Transaction.wrap(function () {
-            request.session.customer.profile.getCustom().rewardInfo = profileReward;
+            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
         });
     }
 }
@@ -275,31 +280,26 @@ function cleanUpRewards() {
     var profileReward = request.session.customer.profile.getCustom().rewardInfo;
 
     // Remove expired coupons from basket according to preference time
-    var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '{}';
+    var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '';
     var currentTime = new Date().getTime() / 60000;
 
-    if (profileReward) {
-        var profileRewardList = profileReward.split(';');
-        profileReward = '';
-        for (let index = 0; index < profileRewardList.length; index += 1) {
-            var reward = JSON.parse(profileRewardList[index]);
-            var appliedMinutes = reward.reward_id.time / 60000;
-            if (currentTime - appliedMinutes < timeoutDuration) {
-                if (index !== 0) {
-                    profileReward += ';';
-                }
-                profileReward += profileRewardList[index];
-            } else {
-                removeCouponToCart(reward);
+    if (profileReward && timeoutDuration) {
+        var profileRewardList = JSON.parse(profileReward);
+
+        profileRewardList.forEach(function (reward) {
+            var appliedMinutes = reward.time / 60000;
+            if (currentTime - appliedMinutes > timeoutDuration) {
                 var rewardRedeemOptions = {
                     transactionId: reward.transactionID,
                     customer: request.session.customer.profile
                 };
-                zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+                var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+                // removing couponLineItem
+                if (result && result.data && result.data.reward_info && result.data.reward_info) {
+                    removeCouponToCart(result.data.reward_info);
+                    removeRewardsFromProfile(reward);
+                }
             }
-        }
-        Transaction.wrap(function () {
-            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
         });
     }
 }
