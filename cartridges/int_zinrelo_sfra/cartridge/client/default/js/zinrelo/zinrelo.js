@@ -176,7 +176,8 @@ function handleProductAttributeUpdate() {
         var currentPrice = $('.zinreloProductPrice').val() || '';
         var isSamePrice = price === parseInt(currentPrice, 10);
 
-        if (!price || isSamePrice) {
+        // eslint-disable-next-line camelcase, no-undef
+        if (!price || isSamePrice || (typeof zrl_mi !== 'undefined')) {
             return;
         }
 

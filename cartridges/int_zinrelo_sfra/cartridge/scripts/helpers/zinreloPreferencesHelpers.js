@@ -100,6 +100,24 @@ function getZinreloPDPRewardsText() {
     return zinreloPDPRewardsText;
 }
 
+/**
+ * Checks whether zinrelo order creation event is enabled in the preferences or not
+ * @returns {boolean} whether zinrelo order creation event is enabled
+ */
+function isZinreloOrderCreationEventEnabled() {
+    var zinreloOrderCreationEventEnabled = currentSite.getCustomPreferenceValue('zinreloEnableOrderCreationEvent') || '';
+    return !!(zinreloOrderCreationEventEnabled);
+}
+
+/**
+ * Checks whether zinrelo order placed event is enabled in the preferences or not
+ * @returns {boolean} whether zinrelo order placed event is enabled
+ */
+function isZinreloOrderPlacedEventEnabled() {
+    var zinreloOrderPlacedEventEnabled = currentSite.getCustomPreferenceValue('zinreloEnableOrderConfirmationEvent') || '';
+    return !!(zinreloOrderPlacedEventEnabled);
+}
+
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
     getParnerID: getParnerID,
@@ -110,5 +128,7 @@ module.exports = {
     isInCartRedemptionEnabled: isInCartRedemptionEnabled,
     getZinreloWebhookURL: getZinreloWebhookURL,
     isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
-    getZinreloPDPRewardsText: getZinreloPDPRewardsText
+    getZinreloPDPRewardsText: getZinreloPDPRewardsText,
+    isZinreloOrderCreationEventEnabled: isZinreloOrderCreationEventEnabled,
+    isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled
 };

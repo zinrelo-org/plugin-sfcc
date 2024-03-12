@@ -54,6 +54,13 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+             <attribute-definition attribute-id="returnedItems">
+                <display-name xml:lang="x-default">Returned Items</display-name>
+                <description xml:lang="x-default">Add returned items in a JSON format</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloOrderStatus">
                 <display-name xml:lang="x-default">Zinrelo Order Status</display-name>
                 <type>enum-of-string</type>
@@ -92,13 +99,11 @@
             </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
-            <attribute-group group-id="orderStatus">
-                <display-name xml:lang="x-default">Order Status</display-name>
+            <attribute-group group-id="zinrelo">
+                <display-name xml:lang="x-default">Zinrelo</display-name>
                 <attribute attribute-id="orderStatus"/>
-            </attribute-group>
-            <attribute-group group-id="zinreloOrderStatus">
-                <display-name xml:lang="x-default">Zinrelo Order Status</display-name>
                 <attribute attribute-id="zinreloOrderStatus"/>
+                <attribute attribute-id="returnedItems"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
