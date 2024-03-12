@@ -34,6 +34,15 @@ function initZinreloDashboard() {
 }
 
 /**
+ * Handles for rewards error operations
+ * @param {string} errorMessage current event
+ */
+function showError(errorMessage) {
+    $('.reward-error').html(errorMessage);
+}
+
+
+/**
  * Handles for rewards operations
  * @param {Object} e current event
  */
@@ -60,8 +69,14 @@ function handleRewardAjax(e) {
             $.spinner().stop();
             if (result.success) {
                 // Refresh the in-cart redemption section
-                $('body').trigger('renderInCartRedemptionSection');
-                $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                if (result.basketModel && result.basketModel.error && result.basketModel.error === true) {
+                    showError(result.basketModel.errorMessage);
+                } else {
+                    $('body').trigger('renderInCartRedemptionSection');
+                    $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                }
+            } else {
+                showError(result.reason);
             }
         },
         error: function () {
@@ -85,6 +100,7 @@ function bindEvents() {
 
     $zinreloRewardsDropdown.on('change', function () {
         if ($(this).val()) {
+            showError('');
             $redeemZinreloRewardBtn.attr('disabled', false);
         } else {
             $redeemZinreloRewardBtn.attr('disabled', true);

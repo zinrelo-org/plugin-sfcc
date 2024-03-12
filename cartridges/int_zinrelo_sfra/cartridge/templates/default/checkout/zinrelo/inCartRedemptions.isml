@@ -24,6 +24,7 @@
                             <button class="btn btn-primary btn-block mt-3 mt-md-0 redeemZinreloRewardBtn" type="submit">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
                         </div>
                     </div>
+                    <span class="reward-error text-danger"></span>
                 </form>
             </isif>
     
