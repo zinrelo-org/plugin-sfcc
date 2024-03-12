@@ -82,6 +82,24 @@ function getZinreloWebhookURL() {
     return zinreloWebhookURL;
 }
 
+/**
+ * Checks whether pdp rewards feature is enabled in the preferences or not
+ * @returns {boolean} whether pdp rewards feature is enabled
+ */
+function isZinreloRewardsEnabledOnPDP() {
+    var zinreloRewardsEnabledOnPDP = currentSite.getCustomPreferenceValue('zinreloEnableRewardsOnPDP') || '';
+    return !!(zinreloRewardsEnabledOnPDP);
+}
+
+/**
+ * Gets zinrelo pdp rewards text
+ * @returns {string} zinrelo pdp rewards text
+ */
+function getZinreloPDPRewardsText() {
+    var zinreloPDPRewardsText = currentSite.getCustomPreferenceValue('zinreloPDPRewardsText') || '';
+    return zinreloPDPRewardsText;
+}
+
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
     getParnerID: getParnerID,
@@ -90,5 +108,7 @@ module.exports = {
     getInCartDropdownText: getInCartDropdownText,
     getInCartRedemptionText: getInCartRedemptionText,
     isInCartRedemptionEnabled: isInCartRedemptionEnabled,
-    getZinreloWebhookURL: getZinreloWebhookURL
+    getZinreloWebhookURL: getZinreloWebhookURL,
+    isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
+    getZinreloPDPRewardsText: getZinreloPDPRewardsText
 };

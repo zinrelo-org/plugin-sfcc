@@ -166,12 +166,46 @@ function checkoutTotalsUpdate() {
     });
 }
 
+/**
+ * Handles attribute update event on PDP
+ */
+function handleProductAttributeUpdate() {
+    $('body').on('product:afterAttributeSelect', function (e, result) {
+        var data = result && result.data;
+        var price = data && data.zinreloPrice;
+        var currentPrice = $('.zinreloProductPrice').val() || '';
+        var isSamePrice = price === parseInt(currentPrice, 10);
+
+        if (!price || isSamePrice) {
+            return;
+        }
+
+        // Update price and zinrelo PDP rewards
+        $('.zinreloProductPrice').val(price);
+        // eslint-disable-next-line camelcase, no-undef
+        zrl_mi.replace_product_page_potential()();
+    });
+}
+
+/**
+ * The following funtion is configured in zinrelo admin dashbaord to get the product price
+ *
+    zrl_mi.price_identifier = function(){
+        var product = {};
+        price = $('.zinreloProductPrice').val();
+        if(price){
+            product['price'] = price;
+        }
+        return product;
+    }
+ */
 
 module.exports = function (currentScript) {
     script = currentScript;
     return {
         initZinreloDashboard: initZinreloDashboard,
         renderInCartRedemptionSection: renderInCartRedemptionSection,
-        checkoutTotalsUpdate: checkoutTotalsUpdate
+        checkoutTotalsUpdate: checkoutTotalsUpdate,
+        handleProductAttributeUpdate: handleProductAttributeUpdate
     };
 };
