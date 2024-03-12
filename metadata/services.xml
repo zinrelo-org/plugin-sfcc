@@ -3,25 +3,25 @@
     <service-credential service-credential-id="int_zinrelo.http.loyalty.service.credentials">
         <url>https://api.zinrelo.com/v2/loyalty/</url>
         <user-id/>
-        <password encrypted="true" encryption-type="common.export">OSdLhcPpDWEQvCicCMaP6AHpc6L7cyZPZvuqBTLZ/4s=</password>
+        <password encrypted="true" encryption-type="common.export"></password>
     </service-credential>
 
     <service-credential service-credential-id="int_zinrelo.http.webhook.processorder">
         <url/>
         <user-id/>
-        <password encrypted="true" encryption-type="common.export">xa1sYSFhxrZojPdivdKkgAtkLlojYvZvDXfLCSPBRuc=</password>
+        <password encrypted="true" encryption-type="common.export"></password>
     </service-credential>
 
     <service-credential service-credential-id="account.manager.generate.token.credentials">
         <url>https://account.demandware.com/dwsso/oauth2/access_token</url>
-        <user-id>d28e0222-aa3d-49c4-995f-7feced36ce8f</user-id>
-        <password encrypted="true" encryption-type="common.export">we9q/TWxBacDiRWfRQUJKJnB++rt3A+tjBFaeZESVgj+dBQ0B75IrO/TXrRuw43x</password>
+        <user-id />
+        <password encrypted="true" encryption-type="common.export"></password>
     </service-credential>
 
     <service-credential service-credential-id="https.ocapi.delete.coupon.credentials">
         <url/>
         <user-id/>
-        <password encrypted="true" encryption-type="common.export">PHMIkEqQbq58uL2rWHJ32nE5q9+O0rsGwz6hefo6uf4=</password>
+        <password encrypted="true" encryption-type="common.export"></password>
     </service-credential>
 
     <service-profile service-profile-id="int_zinrelo.http.loyalty.service.profile">
