@@ -13,6 +13,8 @@ const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceH
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
 const { ZINRELO_REWARD_PENDING_STATUS, ZINRELO_TRANSACTION_REDEEMED_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
+const Site = require('dw/system/Site');
+const currentSite = Site.getCurrent();
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -184,12 +186,65 @@ function removeFromZinreloCustomerGroup(rewardID) {
 }
 
 /**
+ * sets the reward from profile
+ * @param {Object} rewardInfo reward details
+ * @param {string} transactionID transaction details
+ */
+function setRewardToProfile(rewardInfo, transactionID) {
+    var rewardData = {
+        reward_id: rewardInfo.reward_id,
+        coupon_code: rewardInfo.coupon_code,
+        time: new Date().getTime(),
+        transactionID: transactionID
+    };
+
+    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+
+    if (profileReward) {
+        try {
+            profileReward = JSON.parse(profileReward);
+        } catch (error) {
+            profileReward = [];
+        }
+    } else {
+        profileReward = [];
+    }
+
+    Transaction.wrap(function () {
+        profileReward.push(rewardData);
+        request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
+    });
+}
+
+/**
+ * Rejects the reward from profile
+ * @param {Object} rewardInfo reward details
+ */
+function removeRewardsFromProfile(rewardInfo) {
+    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+
+    if (profileReward) {
+        var profileRewardList = JSON.parse(profileReward);
+
+        profileRewardList.forEach(function (reward, index) {
+            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id) {
+                profileRewardList.splice(index, 1);
+            }
+        });
+
+        Transaction.wrap(function () {
+            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileRewardList);
+        });
+    }
+}
+
+/**
  * Applies coupon code to basket
  * @param {Object} rewardInfo reward info object
- * @param {string} transactionId zinrelo transaction id
+ * @param {string} transactionID transaction id
  * @returns {Object} result
  */
-function applyCouponToCart(rewardInfo, transactionId) {
+function applyCouponToCart(rewardInfo, transactionID) {
     var error = false;
     var errorMessage;
     var result = {};
@@ -205,7 +260,7 @@ function applyCouponToCart(rewardInfo, transactionId) {
             var couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
             couponLineItem.custom.isZinreloCoupon = true;
             couponLineItem.custom.zinreloRewardID = rewardInfo.reward_id;
-            couponLineItem.custom.zinreloTransactionId = transactionId || '';
+            couponLineItem.custom.zinreloTransactionId = transactionID || '';
         });
     } catch (e) {
         removeFromZinreloCustomerGroup(rewardInfo.reward_id);
@@ -228,6 +283,7 @@ function applyCouponToCart(rewardInfo, transactionId) {
     Transaction.wrap(function () {
         basketCalculationHelpers.calculateTotals(currentBasket);
     });
+    setRewardToProfile(rewardInfo, transactionID);
 
     result = {
         error: error,
@@ -263,6 +319,7 @@ function removeCouponToCart(rewardInfo) {
             basketCalculationHelpers.calculateTotals(currentBasket);
         });
     }
+    removeRewardsFromProfile(rewardInfo);
 
     result = {
         error: error,
@@ -272,6 +329,38 @@ function removeCouponToCart(rewardInfo) {
     };
 
     return result;
+}
+
+/**
+ * Rejects the reward from profile in a particular time interval
+ */
+function cleanUpRewards() {
+    // Get applied coupons from user profile
+    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+
+    // Remove expired coupons from basket according to preference time
+    var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '';
+    var currentTime = new Date().getTime() / 60000;
+
+    if (profileReward && timeoutDuration) {
+        var profileRewardList = JSON.parse(profileReward);
+
+        profileRewardList.forEach(function (reward) {
+            var appliedMinutes = reward.time / 60000;
+            if (currentTime - appliedMinutes > timeoutDuration) {
+                var rewardRedeemOptions = {
+                    transactionId: reward.transactionID,
+                    customer: request.session.customer.profile
+                };
+                var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+                // removing couponLineItem
+                if (result && result.data && result.data.reward_info && result.data.reward_info) {
+                    removeCouponToCart(result.data.reward_info);
+                    removeRewardsFromProfile(reward);
+                }
+            }
+        });
+    }
 }
 
 /**
@@ -391,5 +480,6 @@ module.exports = {
     checkCouponStatusInZinrelo: checkCouponStatusInZinrelo,
     applyCouponToCart: applyCouponToCart,
     isAlreadyRedeemed: isAlreadyRedeemed,
-    getCouponByUUID: getCouponByUUID
+    getCouponByUUID: getCouponByUUID,
+    cleanUpRewards: cleanUpRewards
 };
