@@ -34,7 +34,7 @@ function createDeleteCouponService(serviceOptions) {
             svc.setURL(url);
 
             svc.setRequestMethod('POST');
-            svc.addHeader('Authentication', 'Bearer ' + serviceOptions.token);
+            svc.addHeader('Authorization', 'Bearer ' + serviceOptions.token);
             svc.addHeader('Content-Type', 'application/json');
 
             return JSON.stringify(params);
