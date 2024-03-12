@@ -7,6 +7,8 @@ constants.ZINRELO_AUTH_VERSION = 'v2';
 constants.ZINRELO_SERVER_URL = 'https://app.zinrelo.com';
 constants.ZINRELO_DATE_FORMAT = 'mm/dd/yy';
 constants.ZINRELO_REWARD_PENDING_STATUS = 'pending';
+constants.ZINRELO_TRANSACTION_REDEEMED_STATUS = 'Redeemed';
+constants.MAX_REDEMPTIONS_PER_COUPON = 1;
 constants.HS512 = {
     algorthimName: 'HS512',
     algorthimCode: 'HMAC_SHA_512'

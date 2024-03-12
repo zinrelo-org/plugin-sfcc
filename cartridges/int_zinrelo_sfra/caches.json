@@ -1,0 +1,8 @@
+{
+    "caches": [
+      {
+        "id": "amToken",
+        "expireAfterSeconds": 899
+      }
+    ]
+  }

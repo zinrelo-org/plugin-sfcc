@@ -2,6 +2,7 @@
 
 var base = module.superModule;
 
+var Resource = require('dw/web/Resource');
 var formatMoney = require('dw/util/StringUtils').formatMoney;
 var collections = require('*/cartridge/scripts/util/collections');
 var HashMap = require('dw/util/HashMap');
@@ -31,6 +32,16 @@ function createDiscountObject(collection, discounts) {
 }
 
 /**
+ * Gets the name of the promotion attatched to the provided coupon
+ * @param {dw.order.CouponLineItem} couponLineItem coupon line item in basket
+ * @returns {string} promotion name
+ */
+function getPromotionNameFromCoupon(couponLineItem) {
+    var promotionName = couponLineItem && couponLineItem.promotion && couponLineItem.promotion.name;
+    return promotionName || Resource.msg('default.zinrelo.promotion.name', 'zinrelo', null);
+}
+
+/**
  * creates an array of discounts.
  * @param {dw.order.LineItemCtnr} lineItemContainer - the current line item container
  * @returns {Array} an array of objects containing promotion and coupon information
@@ -43,17 +54,15 @@ function getDiscounts(lineItemContainer) {
             return { callOutMsg: (typeof priceAdjustment.promotion !== 'undefined' && priceAdjustment.promotion !== null) ? priceAdjustment.promotion.calloutMsg : '' };
         });
 
-        // Zinrelo override to remove zinrelo coupons from discounts in totals model
-        if (!couponLineItem.custom.isZinreloCoupon) {
-            discounts[couponLineItem.UUID] = {
-                type: 'coupon',
-                UUID: couponLineItem.UUID,
-                couponCode: couponLineItem.couponCode,
-                applied: couponLineItem.applied,
-                valid: couponLineItem.valid,
-                relationship: priceAdjustments
-            };
-        }
+        // Zinrelo override to replace the coupon code from discounts in totals model
+        discounts[couponLineItem.UUID] = {
+            type: 'coupon',
+            UUID: couponLineItem.UUID,
+            couponCode: couponLineItem.custom.isZinreloCoupon ? getPromotionNameFromCoupon(couponLineItem) : couponLineItem.couponCode,
+            applied: couponLineItem.applied,
+            valid: couponLineItem.valid,
+            relationship: priceAdjustments
+        };
     });
 
     discounts = createDiscountObject(lineItemContainer.priceAdjustments, discounts);
