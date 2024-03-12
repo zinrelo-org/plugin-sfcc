@@ -42,7 +42,32 @@ function passOrderToZinreloWebhook(secret, orderData) {
     return processOrderService.processOrder().call(data);
 }
 
+/**
+ * Send order to zinrelo with the provided event
+ * @param {string} orderNumber order number
+ * @param {string} status order status
+ */
+function sendOrderEventToZinrelo(orderNumber, status) {
+    var OrderMgr = require('dw/order/OrderMgr');
+    const { getAPIKey } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
+
+    var apiKey = getAPIKey();
+    var order = OrderMgr.getOrder(orderNumber);
+    var orderNumbers = [orderNumber];
+
+    var orderEventPayload = {
+        status: status,
+        orderIDs: orderNumbers
+    };
+    var response = passOrderToZinreloWebhook(apiKey, orderEventPayload);
+    if (response.status === 'OK') {
+        var orders = [order];
+        updateOrders(orders, status);
+    }
+}
+
 module.exports = {
     updateOrders: updateOrders,
-    passOrderToZinreloWebhook: passOrderToZinreloWebhook
+    passOrderToZinreloWebhook: passOrderToZinreloWebhook,
+    sendOrderEventToZinrelo: sendOrderEventToZinrelo
 };

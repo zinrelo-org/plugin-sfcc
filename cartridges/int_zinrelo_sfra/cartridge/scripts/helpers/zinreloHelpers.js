@@ -12,7 +12,7 @@ const basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalc
 const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceHelpers');
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
-const { ZINRELO_REWARD_PENDING_STATUS, ZINRELO_TRANSACTION_REDEEMED_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
+const { ZINRELO_REWARD_PENDING_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -75,26 +75,6 @@ function isAlreadyRedeemed(couponCode) {
     var couponRedemption = CouponMgr.getRedemption(coupon.ID, couponCode);
 
     return (couponRedemption.length > MAX_REDEMPTIONS_PER_COUPON);
-}
-
-/**
- * Gets available transaction for the provided coupon code for current customer
- * @param {string} couponCode coupon code
- * @param {Object} customer current customer object
- * @returns {Object} available transaction for the coupon
- */
-function checkCouponStatusInZinrelo(couponCode, customer) {
-    var result;
-
-    if (couponCode && customer && customer.raw && customer.raw.profile) {
-        // TODO: Check coupon status
-        result = {
-            status: ZINRELO_TRANSACTION_REDEEMED_STATUS,
-            rewardID: ''
-        };
-    }
-
-    return result;
 }
 
 /**
@@ -388,7 +368,6 @@ module.exports = {
     rejectRewardTransaction: rejectRewardTransaction,
     approveAllRewards: approveAllRewards,
     isZinreloCouponCode: isZinreloCouponCode,
-    checkCouponStatusInZinrelo: checkCouponStatusInZinrelo,
     applyCouponToCart: applyCouponToCart,
     isAlreadyRedeemed: isAlreadyRedeemed,
     getCouponByUUID: getCouponByUUID

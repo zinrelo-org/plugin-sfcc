@@ -82,6 +82,42 @@ function getZinreloWebhookURL() {
     return zinreloWebhookURL;
 }
 
+/**
+ * Checks whether pdp rewards feature is enabled in the preferences or not
+ * @returns {boolean} whether pdp rewards feature is enabled
+ */
+function isZinreloRewardsEnabledOnPDP() {
+    var zinreloRewardsEnabledOnPDP = currentSite.getCustomPreferenceValue('zinreloEnableRewardsOnPDP') || '';
+    return !!(zinreloRewardsEnabledOnPDP);
+}
+
+/**
+ * Gets zinrelo pdp rewards text
+ * @returns {string} zinrelo pdp rewards text
+ */
+function getZinreloPDPRewardsText() {
+    var zinreloPDPRewardsText = currentSite.getCustomPreferenceValue('zinreloPDPRewardsText') || '';
+    return zinreloPDPRewardsText;
+}
+
+/**
+ * Checks whether zinrelo order creation event is enabled in the preferences or not
+ * @returns {boolean} whether zinrelo order creation event is enabled
+ */
+function isZinreloOrderCreationEventEnabled() {
+    var zinreloOrderCreationEventEnabled = currentSite.getCustomPreferenceValue('zinreloEnableOrderCreationEvent') || '';
+    return !!(zinreloOrderCreationEventEnabled);
+}
+
+/**
+ * Checks whether zinrelo order placed event is enabled in the preferences or not
+ * @returns {boolean} whether zinrelo order placed event is enabled
+ */
+function isZinreloOrderPlacedEventEnabled() {
+    var zinreloOrderPlacedEventEnabled = currentSite.getCustomPreferenceValue('zinreloEnableOrderConfirmationEvent') || '';
+    return !!(zinreloOrderPlacedEventEnabled);
+}
+
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
     getParnerID: getParnerID,
@@ -90,5 +126,9 @@ module.exports = {
     getInCartDropdownText: getInCartDropdownText,
     getInCartRedemptionText: getInCartRedemptionText,
     isInCartRedemptionEnabled: isInCartRedemptionEnabled,
-    getZinreloWebhookURL: getZinreloWebhookURL
+    getZinreloWebhookURL: getZinreloWebhookURL,
+    isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
+    getZinreloPDPRewardsText: getZinreloPDPRewardsText,
+    isZinreloOrderCreationEventEnabled: isZinreloOrderCreationEventEnabled,
+    isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled
 };

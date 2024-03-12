@@ -22,7 +22,9 @@ constants.orderStatuses = {
     returned: 'returned',
     partiallyReturned: 'partiallyReturned',
     cancelled: Order.ORDER_STATUS_CANCELLED,
-    paid: Order.PAYMENT_STATUS_PAID
+    paid: Order.PAYMENT_STATUS_PAID,
+    placed: 'placed',
+    created: 'created'
 };
 constants.statusQueryMapping = [
     {
