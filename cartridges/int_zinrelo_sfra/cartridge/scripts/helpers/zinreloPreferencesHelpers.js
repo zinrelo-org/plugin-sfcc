@@ -73,6 +73,14 @@ function isInCartRedemptionEnabled() {
     return !!(inCartRedemptionEnabled);
 }
 
+/**
+ * Get zinrelo webhook URL
+ * @returns {string} webhok url
+ */
+function getZinreloWebhookURL() {
+    var zinreloWebhookURL = currentSite.getCustomPreferenceValue('zinreloWebhookURL') || '';
+    return zinreloWebhookURL;
+}
 
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
@@ -81,5 +89,6 @@ module.exports = {
     isZinreloEnabled: isZinreloEnabled,
     getInCartDropdownText: getInCartDropdownText,
     getInCartRedemptionText: getInCartRedemptionText,
-    isInCartRedemptionEnabled: isInCartRedemptionEnabled
+    isInCartRedemptionEnabled: isInCartRedemptionEnabled,
+    getZinreloWebhookURL: getZinreloWebhookURL
 };
