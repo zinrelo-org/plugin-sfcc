@@ -189,6 +189,7 @@ function handleProductAttributeUpdate() {
     $('body').on('product:afterAttributeSelect', function (e, result) {
         var $productContainer = result.container;
         var $zinreloProductPrice = $productContainer.find('.zinreloProductPrice');
+        var $zinreloPDPRewardContainer = $productContainer.find('.zinreloPDPRewardContainer');
 
         var product = result && result.data && result.data.product;
         var price = product && product.zinreloPrice;
@@ -196,8 +197,14 @@ function handleProductAttributeUpdate() {
         var isSamePrice = price === parseInt(currentPrice, 10);
 
         // eslint-disable-next-line camelcase, no-undef
-        if (!price || isSamePrice || (typeof zrl_mi === 'undefined')) {
+        if (isSamePrice || (typeof zrl_mi === 'undefined')) {
             return;
+        }
+
+        if (price > 0) {
+            $zinreloPDPRewardContainer.removeClass('d-none');
+        } else {
+            $zinreloPDPRewardContainer.addClass('d-none');
         }
 
         // Update price and zinrelo PDP rewards
