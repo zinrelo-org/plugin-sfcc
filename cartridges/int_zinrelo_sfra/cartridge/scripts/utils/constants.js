@@ -22,30 +22,10 @@ constants.orderStatuses = {
     returned: 'returned',
     partiallyReturned: 'partiallyReturned',
     cancelled: Order.ORDER_STATUS_CANCELLED,
-    paid: Order.PAYMENT_STATUS_PAID
+    paid: Order.PAYMENT_STATUS_PAID,
+    placed: 'placed',
+    created: 'created'
 };
-constants.statusQueryMapping = [
-    {
-        status: 'shipped',
-        query: 'custom.orderStatus = {0} and custom.zinreloOrderStatus != {1}'
-    },
-    {
-        status: 'returned',
-        query: 'custom.orderStatus = {0} and custom.zinreloOrderStatus != {1}'
-    },
-    {
-        status: 'partiallyReturned',
-        query: 'custom.orderStatus = {0}  and custom.zinreloOrderStatus != {1}'
-    },
-    {
-        status: 'cancelled',
-        query: 'status = {0}  and custom.zinreloOrderStatus != {1}'
-    },
-    {
-        status: 'paid',
-        query: 'paymentStatus = {0}  and custom.zinreloOrderStatus != {1}'
-    }
-];
 constants.orderChunkSize = 200;
 
 module.exports = constants;

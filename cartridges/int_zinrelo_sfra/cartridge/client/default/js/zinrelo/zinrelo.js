@@ -34,6 +34,15 @@ function initZinreloDashboard() {
 }
 
 /**
+ * Handles for rewards error operations
+ * @param {string} errorMessage current event
+ */
+function showError(errorMessage) {
+    $('.reward-error').html(errorMessage);
+}
+
+
+/**
  * Handles for rewards operations
  * @param {Object} e current event
  */
@@ -60,8 +69,14 @@ function handleRewardAjax(e) {
             $.spinner().stop();
             if (result.success) {
                 // Refresh the in-cart redemption section
-                $('body').trigger('renderInCartRedemptionSection');
-                $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                if (result.basketModel && result.basketModel.error && result.basketModel.error === true) {
+                    showError(result.basketModel.errorMessage);
+                } else {
+                    $('body').trigger('renderInCartRedemptionSection');
+                    $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                }
+            } else {
+                showError(result.reason);
             }
         },
         error: function () {
@@ -85,6 +100,7 @@ function bindEvents() {
 
     $zinreloRewardsDropdown.on('change', function () {
         if ($(this).val()) {
+            showError('');
             $redeemZinreloRewardBtn.attr('disabled', false);
         } else {
             $redeemZinreloRewardBtn.attr('disabled', true);
@@ -166,12 +182,50 @@ function checkoutTotalsUpdate() {
     });
 }
 
+/**
+ * Handles attribute update event on PDP
+ */
+function handleProductAttributeUpdate() {
+    $('body').on('product:afterAttributeSelect', function (e, result) {
+        var $productContainer = result.container;
+        var $zinreloProductPrice = $productContainer.find('.zinreloProductPrice');
+
+        var product = result && result.data && result.data.product;
+        var price = product && product.zinreloPrice;
+        var currentPrice = $zinreloProductPrice.val() || '';
+        var isSamePrice = price === parseInt(currentPrice, 10);
+
+        // eslint-disable-next-line camelcase, no-undef
+        if (!price || isSamePrice || (typeof zrl_mi === 'undefined')) {
+            return;
+        }
+
+        // Update price and zinrelo PDP rewards
+        $zinreloProductPrice.val(price);
+        // eslint-disable-next-line camelcase, no-undef
+        zrl_mi.replace_product_page_potential();
+    });
+}
+
+/**
+ * The following funtion is configured in zinrelo admin dashbaord to get the product price
+ *
+    zrl_mi.price_identifier = function(){
+        var product = {};
+        price = $('.zinreloProductPrice').val();
+        if(price){
+            product['price'] = price;
+        }
+        return product;
+    }
+ */
 
 module.exports = function (currentScript) {
     script = currentScript;
     return {
         initZinreloDashboard: initZinreloDashboard,
         renderInCartRedemptionSection: renderInCartRedemptionSection,
-        checkoutTotalsUpdate: checkoutTotalsUpdate
+        checkoutTotalsUpdate: checkoutTotalsUpdate,
+        handleProductAttributeUpdate: handleProductAttributeUpdate
     };
 };
