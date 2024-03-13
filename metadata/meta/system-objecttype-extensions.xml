@@ -87,6 +87,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="rewardInfo">
+                <display-name xml:lang="x-default">rewardInfo</display-name>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloLoyaltyTier">
                 <display-name xml:lang="x-default">Loyalty Tier</display-name>
                 <type>string</type>
@@ -150,6 +157,12 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="timeout_duration">
+                <display-name xml:lang="x-default">Cart session timeout</display-name>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
             <attribute-definition attribute-id="zinreloCartSessionTimeout">
                 <display-name xml:lang="x-default">Cart Session Timeout (In minutes)</display-name>
