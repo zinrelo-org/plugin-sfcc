@@ -1,5 +1,6 @@
 'use strict';
 
+const Transaction = require('dw/system/Transaction');
 /**
  * Save orders and status to update custom status of zinreloOrderStatus.
  *
@@ -7,11 +8,16 @@
  * @param {string} status: String
  */
 function updateOrders(orders, status) {
-    var Transaction = require('dw/system/Transaction');
+    if (!orders) {
+        return;
+    }
 
     Transaction.wrap(function () {
         orders.forEach(function (order) {
-            order.custom.zinreloOrderStatus = status;
+            var currentZinreloOrderStatus = order.custom.zinreloOrderStatus || '';
+            var statusList = currentZinreloOrderStatus ? currentZinreloOrderStatus.split(',') : [];
+            statusList.push(status);
+            order.custom.zinreloOrderStatus = statusList.join(',');
         });
     });
 }

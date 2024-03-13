@@ -19,18 +19,21 @@
               "description": "Enable or diable the job step."
             },
             {
-              "@name": "onlyReturn",
-              "@type": "boolean",
-              "@required": "false",
+              "@name": "customOrderStatusAttribute",
+              "@type": "string",
+              "@required": "true",
               "@trim": "true",
-              "description": "only run step for returned order."
+              "description": "Custom order status for attribute."
             },
             {
-              "@name": "onlyCancel",
-              "@type": "boolean",
-              "@required": "false",
+              "@name": "orderStatus",
+              "@type": "string",
+              "@required": "true",
               "@trim": "true",
-              "description": "only run step for cancelled order."
+              "description": "Send order status to job.",
+              "enum-values": {
+                            "values": ["shipped","returned","partiallyReturned","cancelled","paid"]
+                    }
             }
           ]
         },

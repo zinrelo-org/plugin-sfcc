@@ -20,4 +20,120 @@
             </run-once>
         </triggers>
     </job>
+
+    <job job-id="processAllShippedOrders">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="processAllShippedOrders" type="custom.processAllOrders" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="isStepEnabled">true</parameter>
+                    <parameter name="customOrderStatusAttribute">orderStatus</parameter>
+                    <parameter name="orderStatus">shipped</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2024-03-13Z</date>
+                <time>05:28:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
+    <job job-id="processAllCancelledOrders">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="processAllCancelledOrders" type="custom.processAllOrders" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="isStepEnabled">true</parameter>
+                    <parameter name="customOrderStatusAttribute">orderStatus</parameter>
+                    <parameter name="orderStatus">cancelled</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2024-03-13Z</date>
+                <time>05:33:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
+    <job job-id="processAllPartiallyReturnedOrders">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="processAllPartiallyReturnedOrders" type="custom.processAllOrders" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="isStepEnabled">true</parameter>
+                    <parameter name="customOrderStatusAttribute">orderStatus</parameter>
+                    <parameter name="orderStatus">partiallyReturned</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2024-03-13Z</date>
+                <time>05:32:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
+    <job job-id="processAllPaidOrders">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="processAllPaidOrders" type="custom.processAllOrders" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="isStepEnabled">true</parameter>
+                    <parameter name="customOrderStatusAttribute">orderStatus</parameter>
+                    <parameter name="orderStatus">paid</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2024-03-13Z</date>
+                <time>05:34:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
+    <job job-id="ProcessAllReturnedOrders">
+        <description/>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="ProcessAllReturnedOrders" type="custom.processAllOrders" enforce-restart="false">
+                <description/>
+                <parameters>
+                    <parameter name="isStepEnabled">true</parameter>
+                    <parameter name="customOrderStatusAttribute">orderStatus</parameter>
+                    <parameter name="orderStatus">returned</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="false">
+                <date>2024-03-12Z</date>
+                <time>14:27:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
 </jobs>
