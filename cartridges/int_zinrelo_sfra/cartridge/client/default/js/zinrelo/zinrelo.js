@@ -196,14 +196,14 @@ function handleProductAttributeUpdate() {
         var isSamePrice = price === parseInt(currentPrice, 10);
 
         // eslint-disable-next-line camelcase, no-undef
-        if (!price || isSamePrice || (typeof zrl_mi !== 'undefined')) {
+        if (!price || isSamePrice || (typeof zrl_mi === 'undefined')) {
             return;
         }
 
         // Update price and zinrelo PDP rewards
         $zinreloProductPrice.val(price);
         // eslint-disable-next-line camelcase, no-undef
-        zrl_mi.replace_product_page_potential()();
+        zrl_mi.replace_product_page_potential();
     });
 }
 
