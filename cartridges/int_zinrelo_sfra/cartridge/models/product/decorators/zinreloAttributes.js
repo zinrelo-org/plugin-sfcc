@@ -7,10 +7,15 @@
  */
 function getZinreloPrice(product) {
     var price;
+    var productPrice = product && product.price;
 
-    var listPrice = product && product.price && product.price.list && product.price.list.value;
-    var salesPrice = product && product.price && product.price.sales && product.price.sales.value;
-    price = salesPrice || listPrice;
+    if (productPrice && productPrice.type === 'range') {
+        productPrice = productPrice.min;
+    }
+
+    var listPrice = productPrice && productPrice.list && productPrice.list.value;
+    var salesPrice = productPrice && productPrice.sales && productPrice.sales.value;
+    price = salesPrice || listPrice || 0;
 
     return price;
 }

@@ -1,5 +1,7 @@
 <isset name="zinreloPDPData" value="${pdict.zinreloPDPData}" scope="page" />
 <isif condition="${zinreloPDPData.isZinreloEnabled && zinreloPDPData.isZinreloRewardsEnabledOnPDP && !empty(zinreloPDPData.zinreloPDPRewardsText)}">
-    <isprint value="${zinreloPDPData.zinreloPDPRewardsText}" encoding="off" />
-    <input type="hidden" class="zinreloProductPrice" value="${product.zinreloPrice}" />
+    <div class="zinreloPDPRewardContainer ${product && product.zinreloPrice > 0 ? '' : 'd-none'}">
+        <isprint value="${zinreloPDPData.zinreloPDPRewardsText}" encoding="off" />
+        <input type="hidden" class="zinreloProductPrice" value="${product.zinreloPrice}" />
+    </div>
 </isif>
