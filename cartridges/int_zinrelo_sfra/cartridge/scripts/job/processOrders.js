@@ -42,6 +42,37 @@ function fetchOrders(queryObj) {
     return orderDataObj;
 }
 
+/**
+ * Dynamic set custom status of order.
+ *
+ * @param {string} customOrderAttribute: String
+ * @return {Object} : array of custom order status with query
+ */
+function orderStatusMapping(customOrderAttribute) {
+    return [
+        {
+            status: 'shipped',
+            query: 'custom.' + customOrderAttribute + ' = {0} and NOT custom.zinreloOrderStatus LIKE {1}'
+        },
+        {
+            status: 'returned',
+            query: 'custom.' + customOrderAttribute + ' = {0} and NOT custom.zinreloOrderStatus LIKE {1}'
+        },
+        {
+            status: 'partiallyReturned',
+            query: 'custom.' + customOrderAttribute + ' = {0}  and NOT custom.zinreloOrderStatus LIKE {1}'
+        },
+        {
+            status: 'cancelled',
+            query: 'status = {0}  and NOT custom.zinreloOrderStatus LIKE {1}'
+        },
+        {
+            status: 'paid',
+            query: 'paymentStatus = {0}  and NOT custom.zinreloOrderStatus LIKE {1}'
+        }
+    ];
+}
+
 exports.execute = function (parameters) {
     const {
         getAPIKey
@@ -50,19 +81,22 @@ exports.execute = function (parameters) {
     try {
         var isStepEnabled = parameters.isStepEnabled ? parameters.isStepEnabled : false;
         if (isStepEnabled) {
+            var orderStatus = parameters.orderStatus;
+            var customOrderAttribute = parameters.customOrderStatusAttribute ? parameters.customOrderStatusAttribute : '';
             const zinreloOrderHelpers = require('*/cartridge/scripts/helpers/zinreloOrderHelpers');
-            const constants = require('*/cartridge/scripts/utils/constants');
-            var statusQueryMapping = constants.statusQueryMapping;
+            var statusQueryMapping = orderStatusMapping(customOrderAttribute);
             const secret = getAPIKey();
             statusQueryMapping.forEach(function (statusObj) {
-                var ordersObj = fetchOrders(statusObj);
-                if (ordersObj) {
-                    var { orderEventPayload } = ordersObj;
-                    var response = zinreloOrderHelpers.passOrderToZinreloWebhook(secret, orderEventPayload);
-                    if (response.status === 'OK') {
-                        var orders = ordersObj.orders;
-                        var status = ordersObj.orderEventPayload.status;
-                        zinreloOrderHelpers.updateOrders(orders, status);
+                if (statusObj.status === orderStatus) {
+                    var ordersObj = fetchOrders(statusObj);
+                    if (ordersObj) {
+                        var { orderEventPayload } = ordersObj;
+                        var response = zinreloOrderHelpers.passOrderToZinreloWebhook(secret, orderEventPayload);
+                        if (response.status === 'OK') {
+                            var orders = ordersObj.orders;
+                            var status = ordersObj.orderEventPayload.status;
+                            zinreloOrderHelpers.updateOrders(orders, status);
+                        }
                     }
                 }
             });
