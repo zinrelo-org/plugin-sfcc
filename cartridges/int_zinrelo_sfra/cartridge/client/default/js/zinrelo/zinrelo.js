@@ -171,9 +171,12 @@ function checkoutTotalsUpdate() {
  */
 function handleProductAttributeUpdate() {
     $('body').on('product:afterAttributeSelect', function (e, result) {
-        var data = result && result.data;
-        var price = data && data.zinreloPrice;
-        var currentPrice = $('.zinreloProductPrice').val() || '';
+        var $productContainer = result.container;
+        var $zinreloProductPrice = $productContainer.find('.zinreloProductPrice');
+
+        var product = result && result.data && result.data.product;
+        var price = product && product.zinreloPrice;
+        var currentPrice = $zinreloProductPrice.val() || '';
         var isSamePrice = price === parseInt(currentPrice, 10);
 
         // eslint-disable-next-line camelcase, no-undef
@@ -182,7 +185,7 @@ function handleProductAttributeUpdate() {
         }
 
         // Update price and zinrelo PDP rewards
-        $('.zinreloProductPrice').val(price);
+        $zinreloProductPrice.val(price);
         // eslint-disable-next-line camelcase, no-undef
         zrl_mi.replace_product_page_potential()();
     });
