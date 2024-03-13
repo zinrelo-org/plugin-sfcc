@@ -272,7 +272,7 @@ function redeemReward(customer, rewardsForm) {
         response.basketModel = applyCouponToCart(response.data.reward_info, response.data.id);
 
         if (response && response.basketModel && response.basketModel.error) {
-            // TODO: reject reward in zinrelo
+            zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
         }
 
         delete response.data;
