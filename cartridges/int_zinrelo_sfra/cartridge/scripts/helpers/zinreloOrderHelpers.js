@@ -15,7 +15,7 @@ function updateOrders(orders, status) {
     Transaction.wrap(function () {
         orders.forEach(function (order) {
             var currentZinreloOrderStatus = order.custom.zinreloOrderStatus || '';
-            var statusList = currentZinreloOrderStatus.split(',');
+            var statusList = currentZinreloOrderStatus ? currentZinreloOrderStatus.split(',') : [];
             statusList.push(status);
             order.custom.zinreloOrderStatus = statusList.join(',');
         });
