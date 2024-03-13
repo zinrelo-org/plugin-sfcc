@@ -12,7 +12,7 @@ const basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalc
 const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceHelpers');
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
-const { ZINRELO_REWARD_PENDING_STATUS, ZINRELO_TRANSACTION_REDEEMED_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
+const { ZINRELO_REWARD_PENDING_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
 const Site = require('dw/system/Site');
 const currentSite = Site.getCurrent();
 
