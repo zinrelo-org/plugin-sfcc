@@ -28,14 +28,12 @@ function getUserAuthData(customer) {
     const partnerID = getParnerID();
     const secret = getAPIKey();
 
-    if (customer.raw && customer.raw.profile) {
-        try {
-            // Get JWT token
-            const userJWTData = zinreloUserAuthHelpers.generateUserDataForJWT(customer.raw.profile);
-            jwtToken = jwtGenerator.generateJTWToken(userJWTData, secret);
-        } catch (error) {
-            jwtToken = '';
-        }
+    try {
+        // Get JWT token
+        const userJWTData = zinreloUserAuthHelpers.generateUserDataForJWT(customer.raw.profile);
+        jwtToken = jwtGenerator.generateJTWToken(userJWTData, secret);
+    } catch (error) {
+        jwtToken = '';
     }
 
     userAuthData = {
