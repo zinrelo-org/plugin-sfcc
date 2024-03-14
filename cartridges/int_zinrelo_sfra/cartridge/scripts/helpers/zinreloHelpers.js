@@ -13,8 +13,6 @@ const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceH
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
 const { ZINRELO_REWARD_PENDING_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
-const Site = require('dw/system/Site');
-const currentSite = Site.getCurrent();
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -322,7 +320,7 @@ function cleanUpRewards() {
     var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     // Remove expired coupons from basket according to preference time
-    var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '';
+    var timeoutDuration = zinreloPreferencesHelpers.getZinreloCartSessionTimeout() || '';
     var currentTime = new Date().getTime() / 60000;
 
     if (profileReward && timeoutDuration) {

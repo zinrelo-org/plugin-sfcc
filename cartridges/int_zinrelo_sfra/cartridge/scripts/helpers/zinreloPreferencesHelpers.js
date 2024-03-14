@@ -118,6 +118,15 @@ function isZinreloOrderPlacedEventEnabled() {
     return !!(zinreloOrderPlacedEventEnabled);
 }
 
+/**
+ * Gets zinrelo pdp rewards text
+ * @returns {string} zinrelo pdp rewards text
+ */
+function getZinreloCartSessionTimeout() {
+    var zinreloCartSessionTimeout = currentSite.getCustomPreferenceValue('timeout_duration') || '';
+    return zinreloCartSessionTimeout;
+}
+
 module.exports = {
     getPreferredLanguages: getPreferredLanguages,
     getParnerID: getParnerID,
@@ -130,5 +139,6 @@ module.exports = {
     isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
     getZinreloPDPRewardsText: getZinreloPDPRewardsText,
     isZinreloOrderCreationEventEnabled: isZinreloOrderCreationEventEnabled,
-    isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled
+    isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled,
+    getZinreloCartSessionTimeout: getZinreloCartSessionTimeout
 };
