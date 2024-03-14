@@ -39,7 +39,8 @@ function getRewards(customer) {
 
     if (customer && customer.email) {
         var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
-        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID);
+        var preferredLanguage = customer.custom.zinreloPreferredLanguage || zinreloUserAuthHelpers.getCurrentLocaleLanguage();
+        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID, preferredLanguage);
         var loyaltyRewardsService = createZinreloLoyaltyService(rewardsAPIConfig);
 
         // Prepare payload
