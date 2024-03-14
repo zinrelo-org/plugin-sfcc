@@ -201,12 +201,25 @@ function handleProductAttributeUpdate() {
 /**
  * The following funtion is configured in zinrelo admin dashbaord to get the product price
  *
-    zrl_mi.price_identifier = function(){
+    zrl_mi.price_identifier = function() {
         var product = {};
-        price = $('.zinreloProductPrice').val();
-        if(price){
-            product['price'] = price;
+
+        var price = $('.zinreloProductPrice').val();
+        var categories = $('.zinreloProductCategories').val();
+        var productID = $('.zinreloProductID').val();
+
+        if (price){
+            product.price = price;
         }
+
+        if (categories) {
+            product.categories = JSON.parse(categories);
+        }
+
+        if (productID) {
+            product.id = productID;
+        }
+
         return product;
     }
  */

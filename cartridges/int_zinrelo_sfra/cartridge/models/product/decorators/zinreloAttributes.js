@@ -1,5 +1,7 @@
 'use strict';
 
+const { getCategoryIDs } = require('*/cartridge/scripts/utils/productDataFormatter');
+
 /**
  * Gets price from product
  * @param {Object} product product object
@@ -23,9 +25,14 @@ function getZinreloPrice(product) {
     return totalPrice;
 }
 
-module.exports = function (object) {
+module.exports = function (object, apiProduct) {
     Object.defineProperty(object, 'zinreloPrice', {
         enumerable: true,
         value: getZinreloPrice(object)
+    });
+
+    Object.defineProperty(object, 'productCategories', {
+        enumerable: true,
+        value: getCategoryIDs(apiProduct && apiProduct.categories)
     });
 };
