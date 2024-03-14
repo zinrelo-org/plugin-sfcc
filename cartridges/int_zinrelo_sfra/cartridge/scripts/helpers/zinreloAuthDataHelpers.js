@@ -59,6 +59,10 @@ function generateUserDataForJWT(customer) {
         if (customer.custom.isdCode && customer.custom.phoneHome) {
             userData.phone_number = customer.custom.isdCode + '-' + customer.custom.phoneHome;
         }
+    } else {
+        userData = {
+            preferred_language: getCurrentLocaleLanguage()
+        };
     }
 
     return userData;
