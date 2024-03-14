@@ -13,8 +13,6 @@ const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceH
 const collections = require('*/cartridge/scripts/util/collections');
 const CartModel = require('*/cartridge/models/cart');
 const { ZINRELO_REWARD_PENDING_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
-const Site = require('dw/system/Site');
-const currentSite = Site.getCurrent();
 
 /**
  * Gets pending rewards list from pending transaction list
@@ -178,7 +176,8 @@ function setRewardToProfile(rewardInfo, transactionID) {
         transactionID: transactionID
     };
 
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     if (profileReward) {
         try {
@@ -201,7 +200,8 @@ function setRewardToProfile(rewardInfo, transactionID) {
  * @param {Object} rewardInfo reward details
  */
 function removeRewardsFromProfile(rewardInfo) {
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     if (profileReward) {
         var profileRewardList = JSON.parse(profileReward);
@@ -316,10 +316,11 @@ function removeCouponToCart(rewardInfo) {
  */
 function cleanUpRewards() {
     // Get applied coupons from user profile
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     // Remove expired coupons from basket according to preference time
-    var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '';
+    var timeoutDuration = zinreloPreferencesHelpers.getZinreloCartSessionTimeout() || '';
     var currentTime = new Date().getTime() / 60000;
 
     if (profileReward && timeoutDuration) {
