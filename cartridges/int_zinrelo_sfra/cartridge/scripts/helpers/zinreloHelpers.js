@@ -361,6 +361,7 @@ function redeemReward(customer, rewardsForm) {
         response.basketModel = applyCouponToCart(response.data.reward_info, response.data.id);
 
         if (response && response.basketModel && response.basketModel.error) {
+            rewardRedeemOptions.transactionId = response.data.id;
             zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
         }
 
