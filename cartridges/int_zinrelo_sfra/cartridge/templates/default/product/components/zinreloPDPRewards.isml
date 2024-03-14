@@ -3,5 +3,7 @@
     <div class="zinreloPDPRewardContainer ${product && product.zinreloPrice > 0 ? '' : 'd-none'}">
         <isprint value="${zinreloPDPData.zinreloPDPRewardsText}" encoding="off" />
         <input type="hidden" class="zinreloProductPrice" value="${product.zinreloPrice}" />
+        <input type="hidden" class="zinreloProductCategories" value="${product.productCategories ? JSON.stringify(product.productCategories) : ''}" />
+        <input type="hidden" class="zinreloProductID" value="${product.id}" />
     </div>
 </isif>

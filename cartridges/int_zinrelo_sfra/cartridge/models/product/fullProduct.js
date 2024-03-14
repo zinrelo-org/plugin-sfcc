@@ -19,7 +19,7 @@ var decorators = require('*/cartridge/models/product/decorators/index');
  */
 function fullProduct(product, apiProduct, options) {
     base.call(this, product, apiProduct, options);
-    decorators.zinreloAttributes(product);
+    decorators.zinreloAttributes(product, apiProduct);
     return product;
 }
 
