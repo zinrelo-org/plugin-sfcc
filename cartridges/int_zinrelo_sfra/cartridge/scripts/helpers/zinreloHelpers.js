@@ -178,7 +178,8 @@ function setRewardToProfile(rewardInfo, transactionID) {
         transactionID: transactionID
     };
 
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     if (profileReward) {
         try {
@@ -201,7 +202,8 @@ function setRewardToProfile(rewardInfo, transactionID) {
  * @param {Object} rewardInfo reward details
  */
 function removeRewardsFromProfile(rewardInfo) {
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     if (profileReward) {
         var profileRewardList = JSON.parse(profileReward);
@@ -316,7 +318,8 @@ function removeCouponToCart(rewardInfo) {
  */
 function cleanUpRewards() {
     // Get applied coupons from user profile
-    var profileReward = request.session.customer.profile.getCustom().rewardInfo;
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
 
     // Remove expired coupons from basket according to preference time
     var timeoutDuration = currentSite.getCustomPreferenceValue('timeout_duration') || '';
