@@ -7,6 +7,7 @@
  */
 var Status = require('dw/system/Status');
 var OrderMgr = require('dw/order/OrderMgr');
+var Logger = require('dw/system/Logger');
 
 /**
  * Dynamic query to get orders.
@@ -81,6 +82,7 @@ exports.execute = function (parameters) {
     try {
         var isStepEnabled = parameters.isStepEnabled ? parameters.isStepEnabled : false;
         if (isStepEnabled) {
+            var updateOrders;
             var orderStatus = parameters.orderStatus;
             var customOrderAttribute = parameters.customOrderStatusAttribute ? parameters.customOrderStatusAttribute : '';
             const zinreloOrderHelpers = require('*/cartridge/scripts/helpers/zinreloOrderHelpers');
@@ -95,11 +97,12 @@ exports.execute = function (parameters) {
                         if (response.status === 'OK') {
                             var orders = ordersObj.orders;
                             var status = ordersObj.orderEventPayload.status;
-                            zinreloOrderHelpers.updateOrders(orders, status);
+                            updateOrders = zinreloOrderHelpers.updateOrders(orders, status) || [];
                         }
                     }
                 }
             });
+            Logger.info('Orders sent to zinrelo and updated for status {0} : {1}', orderStatus, updateOrders.join(','));
             return new Status(Status.OK);
         }
         return new Status(Status.ERROR, 'Warn', 'Job step is not enabled.');

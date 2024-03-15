@@ -6,10 +6,12 @@ const Transaction = require('dw/system/Transaction');
  *
  * @param {string} orders: Object
  * @param {string} status: String
+ * @return {Array} list of updated order numbers
  */
 function updateOrders(orders, status) {
+    var updatedOrders = [];
     if (!orders) {
-        return;
+        return updatedOrders;
     }
 
     Transaction.wrap(function () {
@@ -18,8 +20,11 @@ function updateOrders(orders, status) {
             var statusList = currentZinreloOrderStatus ? currentZinreloOrderStatus.split(',') : [];
             statusList.push(status);
             order.custom.zinreloOrderStatus = statusList.join(',');
+            updatedOrders.push(order.orderNo);
         });
     });
+
+    return updatedOrders;
 }
 
 
