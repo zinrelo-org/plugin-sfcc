@@ -60,14 +60,16 @@ function getRewards(customer) {
 
     var zinreloRedeemedRewards = session.custom.applicableZinreloRewards || '';
     var zinreloRewardsList = zinreloRedeemedRewards.split(',');
-    // Get available rewards for current customer from zinrelo
-    for (let index = 0; index < rewards.length; index += 1) {
-        if (zinreloRewardsList.indexOf(rewards[index].reward_id) >= 0) {
-            rewards.splice(index, 1);
-        }
-    }
+    var updatedRewardsList = [];
 
-    return rewards;
+    // Get available rewards for current customer from zinrelo
+    rewards.forEach(function (reward) {
+        if (!(zinreloRewardsList.indexOf(reward.reward_id) >= 0)) {
+            updatedRewardsList.push(reward);
+        }
+    });
+
+    return updatedRewardsList;
 }
 
 /**

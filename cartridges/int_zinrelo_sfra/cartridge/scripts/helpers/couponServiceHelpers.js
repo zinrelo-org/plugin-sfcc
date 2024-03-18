@@ -51,7 +51,11 @@ function deleteCoupon(couponCodeList) {
 
     // Get the coupon
     var coupon = CouponMgr.getCouponByCode(couponCodeList[0]);
-    var couponID = coupon.ID;
+    var couponID = coupon && coupon.ID;
+
+    if (!couponID) {
+        return result;
+    }
 
     // Get the account manager bearer token
     var token = generateAMToken();
