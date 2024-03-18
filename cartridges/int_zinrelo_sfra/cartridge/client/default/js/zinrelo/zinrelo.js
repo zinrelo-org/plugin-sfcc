@@ -146,6 +146,14 @@ function renderInCartRedemptionSection() {
  */
 function checkoutTotalsUpdate() {
     $('body').on('couponRedemption', function (e, data) {
+        // Check if number products on the page is different than returned products
+        var productsOnPage = $('.product-summary-block .product-line-item').length;
+        var productsInCart = (data && data.numItems) || 0;
+
+        if (productsOnPage && productsOnPage !== productsInCart) {
+            window.location.reload();
+        }
+
         $('.shipping-total-cost').empty().append(data.totals.totalShippingCost);
         $('.tax-total').empty().append(data.totals.totalTax);
         $('.grand-total-sum').empty().append(data.totals.grandTotal);
