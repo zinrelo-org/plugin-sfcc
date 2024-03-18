@@ -3,6 +3,12 @@
 var server = require('server');
 server.extend(module.superModule);
 
+server.prepend('PlaceOrder', function (req, res, next) {
+    var zinreloHelper = require('*/cartridge/scripts/helpers/zinreloHelpers');
+    zinreloHelper.cleanUpRewards();
+    next();
+});
+
 server.append('PlaceOrder', function (req, res, next) {
     const { approveAllRewards } = require('*/cartridge/scripts/helpers/zinreloHelpers');
     const { sendOrderEventToZinrelo } = require('*/cartridge/scripts/helpers/zinreloOrderHelpers');

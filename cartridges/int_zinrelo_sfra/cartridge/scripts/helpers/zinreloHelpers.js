@@ -15,6 +15,23 @@ const CartModel = require('*/cartridge/models/cart');
 const { ZINRELO_REWARD_PENDING_STATUS, MAX_REDEMPTIONS_PER_COUPON } = require('*/cartridge/scripts/utils/constants');
 
 /**
+ * Gets applicable zinrelo rewards from current session
+ * @returns {Array} list of applicable zinrelo rewards
+ */
+function getApplicableZinreloRewards() {
+    var zinreloRewards = session.custom.applicableZinreloRewards ? session.custom.applicableZinreloRewards.split(',') : [];
+    return zinreloRewards;
+}
+
+/**
+ * Sets applicable zinrelo rewards to current session
+ * @param {Array} rewards list of rewards
+ */
+function setApplicableZinreloRewards(rewards) {
+    session.custom.applicableZinreloRewards = rewards && rewards.length > 0 ? rewards.join(',') : '';
+}
+
+/**
  * Gets pending rewards list from pending transaction list
  * @param {Array} pendingTransactionList list of pending transactions
  * @returns {Array} list of pending rewards
@@ -23,12 +40,16 @@ function getPendingRewards(pendingTransactionList) {
     var pendingRewards = [];
 
     if (pendingTransactionList && pendingTransactionList.length) {
+        var zinreloRewardsInSession = getApplicableZinreloRewards();
         pendingTransactionList.forEach(function (pendingTransaction) {
-            pendingRewards.push({
-                reward_id: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_id) || '',
-                reward_name: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_name) || '',
-                transactionId: (pendingTransaction && pendingTransaction.id) || ''
-            });
+            var rewardID = (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_id) || '';
+            if (rewardID && zinreloRewardsInSession && zinreloRewardsInSession.indexOf(rewardID) >= 0) {
+                pendingRewards.push({
+                    reward_id: rewardID,
+                    reward_name: (pendingTransaction && pendingTransaction.reward_info && pendingTransaction.reward_info.reward_name) || '',
+                    transactionId: (pendingTransaction && pendingTransaction.id) || ''
+                });
+            }
         });
     }
 
@@ -111,23 +132,6 @@ function getInCartRedemptionData(customer) {
     }
 
     return inCartRedemptionData;
-}
-
-/**
- * Gets applicable zinrelo rewards from current session
- * @returns {Array} list of applicable zinrelo rewards
- */
-function getApplicableZinreloRewards() {
-    var zinreloRewards = session.custom.applicableZinreloRewards ? session.custom.applicableZinreloRewards.split(',') : [];
-    return zinreloRewards;
-}
-
-/**
- * Sets applicable zinrelo rewards to current session
- * @param {Array} rewards list of rewards
- */
-function setApplicableZinreloRewards(rewards) {
-    session.custom.applicableZinreloRewards = rewards && rewards.length > 0 ? rewards.join(',') : '';
 }
 
 /**
@@ -312,6 +316,28 @@ function removeCouponToCart(rewardInfo) {
 }
 
 /**
+ * Gets zinrelo rewards from provided or current basket
+ * @param {dw.order.Basket} basket basket object
+ * @returns {Array} list of zinrelo rewards from basket
+ */
+function getRewardsFromBasket(basket) {
+    var rewardsInBasket = [];
+    var currentBasket = basket || BasketMgr.getCurrentBasket();
+
+    if (!currentBasket) {
+        return rewardsInBasket;
+    }
+
+    collections.forEach(currentBasket.couponLineItems, function (couponLineItem) {
+        if (couponLineItem.custom.isZinreloCoupon && couponLineItem.custom.zinreloRewardID) {
+            rewardsInBasket.push(couponLineItem.custom.zinreloRewardID);
+        }
+    });
+
+    return rewardsInBasket;
+}
+
+/**
  * Rejects the reward from profile in a particular time interval
  */
 function cleanUpRewards() {
@@ -342,6 +368,11 @@ function cleanUpRewards() {
             }
         });
     }
+
+
+    // Replace rewards in session with available rewards in cart
+    var rewardsInBasket = getRewardsFromBasket();
+    setApplicableZinreloRewards(rewardsInBasket);
 }
 
 /**
@@ -449,6 +480,7 @@ function approveAllRewards(customer, orderNumber) {
 
         if (result && result.success) {
             // Remove this reward from user's profile
+            removeRewardsFromProfile(transaction.reward_info);
         }
     });
 }
