@@ -8,7 +8,7 @@ const zinreloUserAuthHelpers = require('*/cartridge/scripts/helpers/zinreloAuthD
 const { createZinreloLoyaltyService } = require('*/cartridge/scripts/services/zinreloLoyaltyServices');
 const { ZINRELO_REWARD_PENDING_STATUS } = require('*/cartridge/scripts/utils/constants');
 const {
-    getRewardsAPIConfigs, getMemberAPIConfigs, getRedeemAPIConfigs, getTransactionListAPIConfigs, getTransactionRejectAPIConfigs
+    getRewardsAPIConfigs, getMemberAPIConfigs, getRedeemAPIConfigs, getTransactionListAPIConfigs, getTransactionRejectAPIConfigs, getTransactionApproveAPIConfigs
 } = require('*/cartridge/scripts/zinreloLoyaltyConfigs');
 
 /**
@@ -39,7 +39,8 @@ function getRewards(customer) {
 
     if (customer && customer.email) {
         var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
-        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID);
+        var preferredLanguage = customer.custom.zinreloPreferredLanguage || zinreloUserAuthHelpers.getCurrentLocaleLanguage();
+        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID, preferredLanguage);
         var loyaltyRewardsService = createZinreloLoyaltyService(rewardsAPIConfig);
 
         // Prepare payload
@@ -54,6 +55,15 @@ function getRewards(customer) {
         if (response && response.object) {
             var { data } = JSON.parse(response.object);
             rewards = data.rewards;
+        }
+    }
+
+    var zinreloRedeemedRewards = session.custom.applicableZinreloRewards || '';
+    var zinreloRewardsList = zinreloRedeemedRewards.split(',');
+    // Get available rewards for current customer from zinrelo
+    for (let index = 0; index < rewards.length; index += 1) {
+        if (zinreloRewardsList.indexOf(rewards[index].reward_id) >= 0) {
+            rewards.splice(index, 1);
         }
     }
 
@@ -147,11 +157,33 @@ function rejectZinreloRewardTransaction(rejecttionOptions) {
     var result = {};
     var { customer, transactionId } = rejecttionOptions;
 
-    if (customer && customer.email) {
-        var memberAPIConfig = getTransactionRejectAPIConfigs(transactionId);
-        var rejectTransactionService = createZinreloLoyaltyService(memberAPIConfig);
+    if (customer && customer.email && transactionId) {
+        var transactionRejectAPIConfigs = getTransactionRejectAPIConfigs(transactionId);
+        var rejectTransactionService = createZinreloLoyaltyService(transactionRejectAPIConfigs);
 
         var response = rejectTransactionService.call();
+        if (response && response.object) {
+            result = JSON.parse(response.object);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Approve transaction request to zinrelo
+ * @param {Object} transactionApproveOptions transaction approve options
+ * @returns {Object} result
+ */
+function approveZinreloRewardTransaction(transactionApproveOptions) {
+    var result = {};
+    var { customer, transactionId } = transactionApproveOptions;
+
+    if (customer && customer.email) {
+        var transactionApproveAPIConfigs = getTransactionApproveAPIConfigs(transactionId);
+        var approveTransactionService = createZinreloLoyaltyService(transactionApproveAPIConfigs);
+
+        var response = approveTransactionService.call();
         if (response && response.object) {
             result = JSON.parse(response.object);
         }
@@ -165,5 +197,6 @@ module.exports = {
     getMemberData: getMemberData,
     redeemZinreloReward: redeemZinreloReward,
     getMemberTransactions: getMemberTransactions,
-    rejectZinreloRewardTransaction: rejectZinreloRewardTransaction
+    rejectZinreloRewardTransaction: rejectZinreloRewardTransaction,
+    approveZinreloRewardTransaction: approveZinreloRewardTransaction
 };

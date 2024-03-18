@@ -34,6 +34,15 @@ function initZinreloDashboard() {
 }
 
 /**
+ * Handles for rewards error operations
+ * @param {string} errorMessage current event
+ */
+function showError(errorMessage) {
+    $('.reward-error').html(errorMessage);
+}
+
+
+/**
  * Handles for rewards operations
  * @param {Object} e current event
  */
@@ -60,8 +69,14 @@ function handleRewardAjax(e) {
             $.spinner().stop();
             if (result.success) {
                 // Refresh the in-cart redemption section
-                $('body').trigger('renderInCartRedemptionSection');
-                $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                if (result.basketModel && result.basketModel.error && result.basketModel.error === true) {
+                    showError(result.basketModel.errorMessage);
+                } else {
+                    $('body').trigger('renderInCartRedemptionSection');
+                    $('body').trigger('couponRedemption', result.basketModel.basketModel);
+                }
+            } else {
+                showError(result.reason);
             }
         },
         error: function () {
@@ -85,6 +100,7 @@ function bindEvents() {
 
     $zinreloRewardsDropdown.on('change', function () {
         if ($(this).val()) {
+            showError('');
             $redeemZinreloRewardBtn.attr('disabled', false);
         } else {
             $redeemZinreloRewardBtn.attr('disabled', true);
@@ -149,15 +165,87 @@ function checkoutTotalsUpdate() {
         } else {
             $('.shipping-discount').addClass('hide-shipping-discount');
         }
+
+        data.items.forEach(function (item) {
+            if (data.totals.orderLevelDiscountTotal.value > 0) {
+                $('.coupons-and-promos').empty().append(data.totals.discountsHtml);
+            }
+            if (item.renderedPromotions) {
+                $('.item-' + item.UUID).empty().append(item.renderedPromotions);
+            } else {
+                $('.item-' + item.UUID).empty();
+            }
+            $('.uuid-' + item.UUID + ' .unit-price').empty().append(item.renderedPrice);
+            $('.line-item-price-' + item.UUID + ' .unit-price').empty().append(item.renderedPrice);
+            $('.item-total-' + item.UUID).empty().append(item.priceTotal.renderedPrice);
+        });
     });
 }
 
+/**
+ * Handles attribute update event on PDP
+ */
+function handleProductAttributeUpdate() {
+    $('body').on('product:afterAttributeSelect', function (e, result) {
+        var $productContainer = result.container;
+        var $zinreloProductPrice = $productContainer.find('.zinreloProductPrice');
+        var $zinreloPDPRewardContainer = $productContainer.find('.zinreloPDPRewardContainer');
+
+        var product = result && result.data && result.data.product;
+        var price = product && product.zinreloPrice;
+        var currentPrice = $zinreloProductPrice.val() || '';
+        var isSamePrice = price === parseInt(currentPrice, 10);
+
+        // eslint-disable-next-line camelcase, no-undef
+        if (isSamePrice || (typeof zrl_mi === 'undefined')) {
+            return;
+        }
+
+        if (price > 0) {
+            $zinreloPDPRewardContainer.removeClass('d-none');
+        } else {
+            $zinreloPDPRewardContainer.addClass('d-none');
+        }
+
+        // Update price and zinrelo PDP rewards
+        $zinreloProductPrice.val(price);
+        // eslint-disable-next-line camelcase, no-undef
+        zrl_mi.replace_product_page_potential();
+    });
+}
+
+/**
+ * The following funtion is configured in zinrelo admin dashbaord to get the product price
+ *
+    zrl_mi.price_identifier = function() {
+        var product = {};
+
+        var price = $('.zinreloProductPrice').val();
+        var categories = $('.zinreloProductCategories').val();
+        var productID = $('.zinreloProductID').val();
+
+        if (price){
+            product.price = price;
+        }
+
+        if (categories) {
+            product.categories = JSON.parse(categories);
+        }
+
+        if (productID) {
+            product.id = productID;
+        }
+
+        return product;
+    }
+ */
 
 module.exports = function (currentScript) {
     script = currentScript;
     return {
         initZinreloDashboard: initZinreloDashboard,
         renderInCartRedemptionSection: renderInCartRedemptionSection,
-        checkoutTotalsUpdate: checkoutTotalsUpdate
+        checkoutTotalsUpdate: checkoutTotalsUpdate,
+        handleProductAttributeUpdate: handleProductAttributeUpdate
     };
 };

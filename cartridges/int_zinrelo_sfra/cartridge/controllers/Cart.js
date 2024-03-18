@@ -3,13 +3,13 @@
 var server = require('server');
 server.extend(module.superModule);
 
-server.prepend('Begin', function (req, res, next) {
-    const { isZinreloEnabled } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
+var zinreloCouponValidation = require('*/cartridge/scripts/middleware/zinreloCouponValidation');
+
+server.prepend('RemoveCouponLineItem', zinreloCouponValidation.removeZinreloCoupon);
+
+server.prepend('Show', function (req, res, next) {
     var zinreloHelper = require('*/cartridge/scripts/helpers/zinreloHelpers');
     zinreloHelper.cleanUpRewards();
-    res.setViewData({
-        isZinreloEnabled: isZinreloEnabled()
-    });
     next();
 });
 

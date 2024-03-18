@@ -8,11 +8,73 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
+            <attribute-definition attribute-id="zinreloRewardID">
+                <display-name xml:lang="x-default">Zinrelo Reward ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="zinreloTransactionId">
+                <display-name xml:lang="x-default">Zinrelo Transaction ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
         </custom-attribute-definitions>
         <group-definitions>
             <attribute-group group-id="zinrelo">
                 <display-name xml:lang="x-default">Zinrelo</display-name>
                 <attribute attribute-id="isZinreloCoupon"/>
+                <attribute attribute-id="zinreloRewardID"/>
+                <attribute attribute-id="zinreloTransactionId"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+    <type-extension type-id="Order">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="orderStatus">
+                <display-name xml:lang="x-default">Order Status</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition>
+                        <display xml:lang="x-default">Shipped</display>
+                        <value>shipped</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Returned</display>
+                        <value>returned</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Partially Returned</display>
+                        <value>partiallyReturned</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+             <attribute-definition attribute-id="returnedItems">
+                <display-name xml:lang="x-default">Returned Items</display-name>
+                <description xml:lang="x-default">Add returned items in a JSON format</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="zinreloOrderStatus">
+                <display-name xml:lang="x-default">Zinrelo Order Status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="zinrelo">
+                <display-name xml:lang="x-default">Zinrelo</display-name>
+                <attribute attribute-id="orderStatus"/>
+                <attribute attribute-id="zinreloOrderStatus"/>
+                <attribute attribute-id="returnedItems"/>
             </attribute-group>
         </group-definitions>
     </type-extension>
@@ -21,6 +83,13 @@
             <attribute-definition attribute-id="zinreloAvailablePoints">
                 <display-name xml:lang="x-default">Available Points</display-name>
                 <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="rewardInfo">
+                <display-name xml:lang="x-default">rewardInfo</display-name>
+                <type>text</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
@@ -64,6 +133,22 @@
             </attribute-group>
         </group-definitions>
     </type-extension>
+    <type-extension type-id="Promotion">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="isZinreloPromotion">
+                <display-name xml:lang="x-default">Is Zinrelo Promotion</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="zinrelo">
+                <display-name xml:lang="x-default">Zinrelo</display-name>
+                <attribute attribute-id="isZinreloPromotion"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
     <type-extension type-id="SitePreferences">
         <custom-attribute-definitions>
             <attribute-definition attribute-id="zinreloAPIKey">
@@ -72,6 +157,12 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="timeout_duration">
+                <display-name xml:lang="x-default">Cart session timeout</display-name>
+                <type>int</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
             <attribute-definition attribute-id="zinreloCartSessionTimeout">
                 <display-name xml:lang="x-default">Cart Session Timeout (In minutes)</display-name>

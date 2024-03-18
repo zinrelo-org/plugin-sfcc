@@ -3,16 +3,23 @@
 /**
  * Generates config for fetch rewards api
  * @param {string} memberID zinrelo memebr id
+ * @param {string} language option language
  * @returns {Object} fetch rewards api configs
  */
-function getRewardsAPIConfigs(memberID) {
-    return {
+function getRewardsAPIConfigs(memberID, language) {
+    var config = {
         endpoint: 'members/' + memberID + '/rewards',
         method: 'GET',
         params: {
             idParam: 'member_id'
         }
     };
+
+    if (language) {
+        config.params.language = language;
+    }
+
+    return config;
 }
 
 /**

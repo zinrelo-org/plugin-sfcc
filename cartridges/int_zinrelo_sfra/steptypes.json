@@ -1,0 +1,59 @@
+{
+  "step-types": {
+    "script-module-step": [
+      {
+        "@type-id": "custom.processAllOrders",
+        "@supports-site-context": "true",
+        "description": "Get and save all cancecl and return orders and pass to the zinrelo api",
+        "module": "int_zinrelo_sfra/cartridge/scripts/job/processOrders.js",
+        "@supports-organization-context": "false",
+        "transactional": "false",
+        "function": "execute",
+        "parameters": {
+          "parameter": [
+            {
+              "@name": "isStepEnabled",
+              "@type": "boolean",
+              "@required": "false",
+              "@trim": "true",
+              "description": "Enable or diable the job step."
+            },
+            {
+              "@name": "customOrderStatusAttribute",
+              "@type": "string",
+              "@required": "true",
+              "@trim": "true",
+              "description": "Custom order status for attribute."
+            },
+            {
+              "@name": "orderStatus",
+              "@type": "string",
+              "@required": "true",
+              "@trim": "true",
+              "description": "Send order status to job.",
+              "enum-values": {
+                            "values": ["shipped","returned","partiallyReturned","cancelled","paid"]
+                    }
+            }
+          ]
+        },
+        "status-codes": {
+          "status": [
+            {
+              "@code": "ERROR",
+              "description": "Used when an error occurred."
+            },
+            {
+              "@code": "OK",
+              "description": "Used when everything went well."
+            },
+            {
+              "@code": "WARN",
+              "description": "Used when small, but acceptable problems occurred."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
