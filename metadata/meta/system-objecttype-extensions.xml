@@ -158,12 +158,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="timeout_duration">
-                <display-name xml:lang="x-default">Cart session timeout</display-name>
-                <type>int</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-            </attribute-definition>
             <attribute-definition attribute-id="zinreloCartSessionTimeout">
                 <display-name xml:lang="x-default">Cart Session Timeout (In minutes)</display-name>
                 <type>int</type>
