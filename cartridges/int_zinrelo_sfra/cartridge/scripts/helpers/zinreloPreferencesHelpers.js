@@ -123,7 +123,7 @@ function isZinreloOrderPlacedEventEnabled() {
  * @returns {string} zinrelo pdp rewards text
  */
 function getZinreloCartSessionTimeout() {
-    var zinreloCartSessionTimeout = currentSite.getCustomPreferenceValue('timeout_duration') || '';
+    var zinreloCartSessionTimeout = currentSite.getCustomPreferenceValue('zinreloCartSessionTimeout') || '';
     return zinreloCartSessionTimeout;
 }
 
