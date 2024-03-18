@@ -449,6 +449,7 @@ function approveAllRewards(customer, orderNumber) {
 
         if (result && result.success) {
             // Remove this reward from user's profile
+            removeRewardsFromProfile(transaction.reward_info);
         }
     });
 }
