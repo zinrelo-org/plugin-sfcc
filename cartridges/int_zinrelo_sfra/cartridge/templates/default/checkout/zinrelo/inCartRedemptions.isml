@@ -10,7 +10,7 @@
             <isif condition="${pdict.zinreloRewards && pdict.zinreloRewards.length > 0}">     
                 <form class="form redeemRewardForm" action="${URLUtils.url('Zinrelo-RedeemReward')}" method="POST">
                     <div class="row">
-                        <div class="col-sm-8 col-md-6 col-lg-8">                
+                        <div class="col-sm-12 col-md-6 col-lg-8">                
                             <select class="form-control custom-select zinreloRewardsDropdown" name="zinreloReward">
                                 <isif condition="${!empty(pdict.inCartDropdownText)}">
                                     <option value="">${pdict.inCartDropdownText}</option>
@@ -20,7 +20,7 @@
                                 </isloop>
                             </select>
                         </div>
-                        <div class="col-sm-4 pl-0 col-md-6 col-lg-4">
+                        <div class="col-sm-6 pl-0 col-md-6 col-lg-4">
                             <button class="btn btn-primary btn-block mt-3 mt-md-0 ml-3 redeemZinreloRewardBtn" style="width:95%" type="submit">${Resource.msg('label.in.cart.redemption.button', 'zinrelo', null)}</button>
                         </div>
                     </div>
@@ -34,13 +34,13 @@
                 <isloop items="${pdict.pendingRewards}" var="pendingReward" status="loopstatus">
                     <form class="form cancleRewardForm" action="${URLUtils.url('Zinrelo-RejectReward')}" method="POST">
                         <div class="row mt-4">
-                            <div class="col-sm-9 col-md-12 col-lg-8">
+                            <div class="col-sm-12 col-md-12 col-lg-8">
                                 <div class="alert alert-success" role="alert">
                                     ${pendingReward.reward_name}
                                 </div>
                                 <input type="hidden" name="transactionId" value="${pendingReward.transactionId}" />
                             </div>
-                            <div class="col-sm-3 col-md-6 pl-0 col-lg-4">
+                            <div class="col-sm-6 col-md-6 pl-0 col-lg-4">
                                 <button class="btn btn-secondary ml-3 btn-block mt-md-0" style="width:95%;" type="submit">${Resource.msg('label.in.cart.cancel.button', 'zinrelo', null)}</button>
                             </div>
                         </div>
