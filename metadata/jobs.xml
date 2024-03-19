@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
-    <job job-id="ProcessAllOrders">
-        <description/>
-        <parameters/>
-        <flow>
-            <context site-id="RefArch"/>
-            <step step-id="ProcessAllOrdersJob" type="custom.processAllOrders" enforce-restart="false">
-                <description/>
-                <parameters>
-                    <parameter name="isStepEnabled">true</parameter>
-                </parameters>
-            </step>
-        </flow>
-        <rules/>
-        <triggers>
-            <run-once enabled="false">
-                <date>2024-02-23Z</date>
-                <time>07:52:00.000Z</time>
-            </run-once>
-        </triggers>
-    </job>
-
     <job job-id="processAllShippedOrders">
         <description/>
         <parameters/>
