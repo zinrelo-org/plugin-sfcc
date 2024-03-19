@@ -216,29 +216,6 @@
                 <min-length>0</min-length>
                 <default-value>Reward</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="zinreloInCartDropdownText">
-                <display-name xml:lang="x-default">In-cart Redemption Dropdown Text</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-            </attribute-definition>
-            <attribute-definition attribute-id="zinreloInCartRedemptionText">
-                <display-name xml:lang="x-default">In-cart Redemption Text</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>You have {{AVAILABLE_POINTS}} points. Select your reward to redeem.</default-value>
-            </attribute-definition>
-            <attribute-definition attribute-id="zinreloPDPRewardsText">
-                <display-name xml:lang="x-default">Rewards Points Text On Product Pages</display-name>
-                <type>string</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <min-length>0</min-length>
-                <default-value>Earn {{EARN_POINTS}} points by ordering this product.</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="zinreloPartnerID">
                 <display-name xml:lang="x-default">Zinrelo Partner ID</display-name>
                 <type>string</type>
@@ -268,10 +245,7 @@
                 <attribute attribute-id="zinreloAPIKey"/>
                 <attribute attribute-id="zinreloWebhookURL"/>
                 <attribute attribute-id="zinreloEnableInCartRedemption"/>
-                <attribute attribute-id="zinreloInCartDropdownText"/>
-                <attribute attribute-id="zinreloInCartRedemptionText"/>
                 <attribute attribute-id="zinreloEnableRewardsOnPDP"/>
-                <attribute attribute-id="zinreloPDPRewardsText"/>
                 <attribute attribute-id="zinreloEnableOrderCreationEvent"/>
                 <attribute attribute-id="zinreloEnableOrderConfirmationEvent"/>
                 <attribute attribute-id="zinreloEnableReturnOrCancellationEvent"/>

@@ -2,7 +2,8 @@
 
 const Resource = require('dw/web/Resource');
 
-const { isZinreloEnabled, isZinreloRewardsEnabledOnPDP, getZinreloPDPRewardsText } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
+const { isZinreloEnabled, isZinreloRewardsEnabledOnPDP } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
+const { getZinreloPDPRewardsText } = require('*/cartridge/scripts/helpers/zinreloContentHelpers');
 
 /**
  * Gets required data for Zinrelo PDP rewards

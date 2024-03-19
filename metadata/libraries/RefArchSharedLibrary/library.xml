@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library xmlns="http://www.demandware.com/xml/impex/library/2006-10-31" library-id="RefArchSharedLibrary">
+  <content content-id="zinreloPDPRewardsText">
+    <display-name xml:lang="x-default">Rewards Points Text On Product Pages</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">Earn {{EARN_POINTS}} points by ordering this product.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="fr-FR">Gagnez {{EARN_POINTS}} points en commandant ce produit.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="it-IT">Guadagna {{EARN_POINTS}} punti ordinando questo prodotto.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="ja-JP">この商品を注文すると、{{EARN_POINTS}} ポイントを獲得できます。</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="zh-CN">订购此产品即可赚取 {{EARN_POINTS}} 积分。</custom-attribute>
+    </custom-attributes>
+    <folder-links>
+    </folder-links>
+  </content>
+
+  <content content-id="zinreloInCartDropdownText">
+    <display-name xml:lang="x-default">In-cart Redemption Dropdown Text</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">Please select your reward</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="fr-FR">Veuillez sélectionner votre récompense</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="it-IT">Seleziona il tuo premio</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="ja-JP">報酬を選択してください</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="zh-CN">请选择您的奖励</custom-attribute>
+    </custom-attributes>
+    <folder-links>
+    </folder-links>
+  </content>
+
+  <content content-id="zinreloInCartRedemptionText">
+    <display-name xml:lang="x-default">In-cart Redemption Text</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">You have {{AVAILABLE_POINTS}} points. Select your reward to redeem.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="fr-FR">Vous avez {{AVAILABLE_POINTS}} points. Sélectionnez votre récompense à échanger.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="it-IT">Hai {{AVAILABLE_POINTS}} punti. Seleziona il tuo premio da riscattare.</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="ja-JP">{{AVAILABLE_POINTS}} ポイントがあります。引き換える報酬を選択してください。</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="zh-CN">您有 {{AVAILABLE_POINTS}} 点积分。选择您要兑换的奖励</custom-attribute>
+    </custom-attributes>
+    <folder-links>
+    </folder-links>
+  </content>
+
+  <content content-id="zinreloInCartRedeemButtonText">
+    <display-name xml:lang="x-default">In Cart Redeem Button Text</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">Redeem</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="fr-FR">Racheter</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="it-IT">Riscattare</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="ja-JP">償還</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="zh-CN">赎回</custom-attribute>
+    </custom-attributes>
+    <folder-links>
+    </folder-links>
+  </content>
+
+  <content content-id="zinreloInCartCancelButtonText">
+    <display-name xml:lang="x-default">In Cart Cancel Button Text</display-name>
+    <online-flag>true</online-flag>
+    <searchable-flag>false</searchable-flag>
+    <custom-attributes>
+      <custom-attribute attribute-id="body" xml:lang="x-default">Cancel</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="fr-FR">Annuler</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="it-IT">Annulla</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="ja-JP">キャンセル</custom-attribute>
+      <custom-attribute attribute-id="body" xml:lang="zh-CN">取消</custom-attribute>
+    </custom-attributes>
+    <folder-links>
+    </folder-links>
+  </content>
+</library>
