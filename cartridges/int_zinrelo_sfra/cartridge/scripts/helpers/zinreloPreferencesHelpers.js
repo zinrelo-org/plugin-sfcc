@@ -47,24 +47,6 @@ function isZinreloEnabled() {
 }
 
 /**
- * Gets in cart dropdown text from preferences
- * @returns {string} in cart dropdown text
- */
-function getInCartDropdownText() {
-    var inCartDropdownText = currentSite.getCustomPreferenceValue('zinreloInCartDropdownText') || '';
-    return inCartDropdownText;
-}
-
-/**
- * Gets in cart redemption text from preferences
- * @returns {string} in cart redemption text
- */
-function getInCartRedemptionText() {
-    var inCartRedemptionText = currentSite.getCustomPreferenceValue('zinreloInCartRedemptionText') || '';
-    return inCartRedemptionText;
-}
-
-/**
  * Checks whether in cart redemption is enabled in the preferences or not
  * @returns {boolean} whether in cart redemption is enabled
  */
@@ -89,15 +71,6 @@ function getZinreloWebhookURL() {
 function isZinreloRewardsEnabledOnPDP() {
     var zinreloRewardsEnabledOnPDP = currentSite.getCustomPreferenceValue('zinreloEnableRewardsOnPDP') || '';
     return !!(zinreloRewardsEnabledOnPDP);
-}
-
-/**
- * Gets zinrelo pdp rewards text
- * @returns {string} zinrelo pdp rewards text
- */
-function getZinreloPDPRewardsText() {
-    var zinreloPDPRewardsText = currentSite.getCustomPreferenceValue('zinreloPDPRewardsText') || '';
-    return zinreloPDPRewardsText;
 }
 
 /**
@@ -132,12 +105,9 @@ module.exports = {
     getParnerID: getParnerID,
     getAPIKey: getAPIKey,
     isZinreloEnabled: isZinreloEnabled,
-    getInCartDropdownText: getInCartDropdownText,
-    getInCartRedemptionText: getInCartRedemptionText,
     isInCartRedemptionEnabled: isInCartRedemptionEnabled,
     getZinreloWebhookURL: getZinreloWebhookURL,
     isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
-    getZinreloPDPRewardsText: getZinreloPDPRewardsText,
     isZinreloOrderCreationEventEnabled: isZinreloOrderCreationEventEnabled,
     isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled,
     getZinreloCartSessionTimeout: getZinreloCartSessionTimeout

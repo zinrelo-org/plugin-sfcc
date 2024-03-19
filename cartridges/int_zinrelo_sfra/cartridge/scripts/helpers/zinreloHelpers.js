@@ -7,6 +7,7 @@ const CouponMgr = require('dw/campaign/CouponMgr');
 const OrderMgr = require('dw/order/OrderMgr');
 
 const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
+const zinreloContentHelpers = require('*/cartridge/scripts/helpers/zinreloContentHelpers');
 const zinreloLoyaltyServiceHelpers = require('*/cartridge/scripts/helpers/zinreloLoyaltyServiceHelpers');
 const basketCalculationHelpers = require('*/cartridge/scripts/helpers/basketCalculationHelpers');
 const couponServiceHelpers = require('*/cartridge/scripts/helpers/couponServiceHelpers');
@@ -111,7 +112,7 @@ function getInCartRedemptionData(customer) {
 
     if (customer && customer.raw && customer.raw.profile && isInCartRedemptionEnabled) {
         // Get loyalty points for current customer from zinrelo
-        var inCartRedemptionText = zinreloPreferencesHelpers.getInCartRedemptionText();
+        var inCartRedemptionText = zinreloContentHelpers.getInCartRedemptionText();
         var memberData = zinreloLoyaltyServiceHelpers.getMemberData(customer.raw.profile);
         var availablePoints = (memberData && memberData.availablePoints) || 0;
         inCartRedemptionText = inCartRedemptionText.replace(/{{AVAILABLE_POINTS}}/g, availablePoints);
@@ -119,7 +120,7 @@ function getInCartRedemptionData(customer) {
         // Get available rewards for current customer from zinrelo
         var zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
         inCartRedemptionData.zinreloRewards = zinreloRewards;
-        inCartRedemptionData.inCartDropdownText = zinreloPreferencesHelpers.getInCartDropdownText();
+        inCartRedemptionData.inCartDropdownText = zinreloContentHelpers.getInCartDropdownText();
         inCartRedemptionData.inCartRedemptionText = inCartRedemptionText;
 
         // Get pending transactions for current customer from zinrelo
@@ -127,6 +128,10 @@ function getInCartRedemptionData(customer) {
         var pendingTransactions = zinreloLoyaltyServiceHelpers.getMemberTransactions(customer.raw.profile, transactionStatusList);
         var pendingRewards = getPendingRewards(pendingTransactions);
         inCartRedemptionData.pendingRewards = pendingRewards;
+
+        // Buttons text
+        inCartRedemptionData.inCartRedeemButtonText = zinreloContentHelpers.getInCartRedeemButtonText();
+        inCartRedemptionData.inCartCancelButtonText = zinreloContentHelpers.getInCartCancelButtonText();
 
         inCartRedemptionData.showInCartSection = !!((zinreloRewards && zinreloRewards.length > 0) || (pendingRewards && pendingRewards.length > 0));
     }

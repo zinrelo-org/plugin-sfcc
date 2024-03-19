@@ -4,7 +4,7 @@ const ISML = require('dw/template/ISML');
 const URLUtils = require('dw/web/URLUtils');
 
 /**
- * Implements the html head hook to allow adding global javascript for zinrelo
+ * Implements the after footer hook to allow adding global javascript for zinrelo after the page footer
  */
 function afterFooter() {
     const zinreloPreferencesHelpers = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
