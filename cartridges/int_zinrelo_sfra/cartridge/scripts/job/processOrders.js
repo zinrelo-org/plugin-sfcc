@@ -82,7 +82,7 @@ exports.execute = function (parameters) {
     try {
         var isStepEnabled = parameters.isStepEnabled ? parameters.isStepEnabled : false;
         if (isStepEnabled) {
-            var updateOrders;
+            var updateOrders = [];
             var orderStatus = parameters.orderStatus;
             var customOrderAttribute = parameters.customOrderStatusAttribute ? parameters.customOrderStatusAttribute : '';
             const zinreloOrderHelpers = require('*/cartridge/scripts/helpers/zinreloOrderHelpers');

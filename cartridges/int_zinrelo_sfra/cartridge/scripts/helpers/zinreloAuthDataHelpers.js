@@ -47,7 +47,7 @@ function generateUserDataForJWT(customer) {
             first_name: customer.firstName || '',
             last_name: customer.lastName || '',
             birthdate: dateFormatter.formatDate(customer.birthday, ZINRELO_DATE_FORMAT) || '',
-            anniversary_date: dateFormatter.formatDate(customer.custom.anniversaryDateZinrelo, ZINRELO_DATE_FORMAT) || '',
+            anniversary_date: dateFormatter.formatDate(customer.custom.zinreloAnniversaryDate, ZINRELO_DATE_FORMAT) || '',
             preferred_language: customer.custom.zinreloPreferredLanguage || getCurrentLocaleLanguage(),
             custom_attributes: {
                 last_visit_date: dateFormatter.formatDate(customer.lastLoginTime, ZINRELO_DATE_FORMAT),
@@ -56,8 +56,8 @@ function generateUserDataForJWT(customer) {
         };
 
         // Add user phone number
-        if (customer.custom.isdCode && customer.custom.phoneHome) {
-            userData.phone_number = customer.custom.isdCode + '-' + customer.custom.phoneHome;
+        if (customer.custom.isdCode && customer.phoneHome) {
+            userData.phone_number = customer.custom.isdCode + '-' + customer.phoneHome;
         }
     } else {
         userData = {

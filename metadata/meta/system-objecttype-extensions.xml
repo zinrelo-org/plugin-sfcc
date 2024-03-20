@@ -101,7 +101,7 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
-            <attribute-definition attribute-id="anniversaryDateZinrelo">
+            <attribute-definition attribute-id="zinreloAnniversaryDate">
                 <display-name xml:lang="x-default">Anniversary Date</display-name>
                 <type>date</type>
                 <mandatory-flag>false</mandatory-flag>
@@ -127,7 +127,7 @@
                 <display-name xml:lang="x-default">Zinrelo</display-name>
                 <attribute attribute-id="zinreloAvailablePoints"/>
                 <attribute attribute-id="zinreloLoyaltyTier"/>
-                <attribute attribute-id="anniversaryDateZinrelo"/>
+                <attribute attribute-id="zinreloAnniversaryDate"/>
                 <attribute attribute-id="zinreloPreferredLanguage"/>
                 <attribute attribute-id="isdCode"/>
             </attribute-group>
@@ -194,13 +194,6 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <default-value>true</default-value>
             </attribute-definition>
-            <attribute-definition attribute-id="zinreloEnableReturnOrCancellationEvent">
-                <display-name xml:lang="x-default">Enable Order Return Or Cancellation Event</display-name>
-                <type>boolean</type>
-                <mandatory-flag>false</mandatory-flag>
-                <externally-managed-flag>false</externally-managed-flag>
-                <default-value>true</default-value>
-            </attribute-definition>
             <attribute-definition attribute-id="zinreloEnableRewardsOnPDP">
                 <display-name xml:lang="x-default">Enable Reward Points Text On Product Pages</display-name>
                 <type>boolean</type>
@@ -248,7 +241,6 @@
                 <attribute attribute-id="zinreloEnableRewardsOnPDP"/>
                 <attribute attribute-id="zinreloEnableOrderCreationEvent"/>
                 <attribute attribute-id="zinreloEnableOrderConfirmationEvent"/>
-                <attribute attribute-id="zinreloEnableReturnOrCancellationEvent"/>
                 <attribute attribute-id="zinreloFreeShippingLabel"/>
                 <attribute attribute-id="zinreloCartSessionTimeout"/>
                 <attribute attribute-id="zinreloPreferredLanguages"/>
