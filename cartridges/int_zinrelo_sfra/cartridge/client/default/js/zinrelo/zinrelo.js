@@ -148,7 +148,7 @@ function checkoutTotalsUpdate() {
     $('body').on('couponRedemption', function (e, data) {
         // Check if number products on the page is different than returned products
         var productsOnPage = $('.product-summary-block .product-line-item').length;
-        var productsInCart = (data && data.numItems) || 0;
+        var productsInCart = (data && data.items && data.items.length) || 0;
 
         if (productsOnPage && productsOnPage !== productsInCart) {
             window.location.reload();
