@@ -242,11 +242,11 @@ function applyCouponToCart(rewardInfo, transactionID) {
     if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
         return result;
     }
-
+    var couponLineItem;
     try {
         addInZinreloCustomerGroup(rewardInfo.reward_id);
         Transaction.wrap(function () {
-            var couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
+            couponLineItem = currentBasket.createCouponLineItem(rewardInfo.coupon_code, true);
             couponLineItem.custom.isZinreloCoupon = true;
             couponLineItem.custom.zinreloRewardID = rewardInfo.reward_id;
             couponLineItem.custom.zinreloTransactionId = transactionID || '';
@@ -272,7 +272,12 @@ function applyCouponToCart(rewardInfo, transactionID) {
     Transaction.wrap(function () {
         basketCalculationHelpers.calculateTotals(currentBasket);
     });
-    setRewardToProfile(rewardInfo, transactionID);
+    if (couponLineItem.applied === false) {
+        error = true;
+        errorMessage = Resource.msg('error.unable.to.add.coupon', 'cart', null);
+    } else {
+        setRewardToProfile(rewardInfo, transactionID);
+    }
 
     result = {
         error: error,
