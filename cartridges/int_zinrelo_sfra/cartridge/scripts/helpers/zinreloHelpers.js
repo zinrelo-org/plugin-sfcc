@@ -275,8 +275,7 @@ function applyCouponToCart(rewardInfo, transactionID) {
     if (couponLineItem.applied === false) {
         error = true;
         errorMessage = Resource.msg('error.unable.to.add.coupon', 'cart', null);
-    }else {
-
+    } else {
         setRewardToProfile(rewardInfo, transactionID);
     }
 
