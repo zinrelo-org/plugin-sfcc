@@ -272,7 +272,7 @@ function applyCouponToCart(rewardInfo, transactionID) {
     Transaction.wrap(function () {
         basketCalculationHelpers.calculateTotals(currentBasket);
     });
-    if (couponLineItem.applied === false) {
+    if (couponLineItem && couponLineItem.applied === false && error === false) {
         error = true;
         errorMessage = Resource.msg('error.unable.to.add.zinrelo.coupon.with.another.coupon', 'cart', null);
     } else {
