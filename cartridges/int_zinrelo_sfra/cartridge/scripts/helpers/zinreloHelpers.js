@@ -274,7 +274,7 @@ function applyCouponToCart(rewardInfo, transactionID) {
     });
     if (couponLineItem.applied === false) {
         error = true;
-        errorMessage = Resource.msg('error.unable.to.add.coupon', 'cart', null);
+        errorMessage = Resource.msg('error.unable.to.add.zinrelo.coupon.with.another.coupon', 'cart', null);
     } else {
         setRewardToProfile(rewardInfo, transactionID);
     }
