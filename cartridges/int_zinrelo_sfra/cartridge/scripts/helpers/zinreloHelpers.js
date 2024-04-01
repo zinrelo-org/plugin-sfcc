@@ -273,6 +273,7 @@ function applyCouponToCart(rewardInfo, transactionID) {
         basketCalculationHelpers.calculateTotals(currentBasket);
     });
     if (couponLineItem && couponLineItem.applied === false && error === false) {
+        removeFromZinreloCustomerGroup(rewardInfo.reward_id);
         error = true;
         errorMessage = Resource.msg('error.unable.to.add.zinrelo.coupon.with.another.coupon', 'cart', null);
     } else {
