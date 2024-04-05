@@ -227,6 +227,43 @@ function removeRewardsFromProfile(rewardInfo) {
     }
 }
 
+
+/**
+ * Removes coupon code from basket
+ * @param {Object} rewardInfo reward info object
+ * @returns {Object} result
+ */
+function removeCouponToCart(rewardInfo) {
+    var error = false;
+    var errorMessage;
+    var result = {};
+
+    var currentBasket = BasketMgr.getCurrentBasket();
+    if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
+        return result;
+    }
+
+    removeFromZinreloCustomerGroup(rewardInfo.reward_id);
+    var couponLineItem = currentBasket.getCouponLineItem(rewardInfo.coupon_code);
+
+    if (couponLineItem) {
+        Transaction.wrap(function () {
+            currentBasket.removeCouponLineItem(couponLineItem);
+            basketCalculationHelpers.calculateTotals(currentBasket);
+        });
+    }
+    removeRewardsFromProfile(rewardInfo);
+
+    result = {
+        error: error,
+        errorMessage: errorMessage,
+        basketModel: new CartModel(currentBasket)
+
+    };
+
+    return result;
+}
+
 /**
  * Applies coupon code to basket
  * @param {Object} rewardInfo reward info object
@@ -272,49 +309,13 @@ function applyCouponToCart(rewardInfo, transactionID) {
     Transaction.wrap(function () {
         basketCalculationHelpers.calculateTotals(currentBasket);
     });
+    setRewardToProfile(rewardInfo, transactionID);
+
     if (couponLineItem && couponLineItem.applied === false && error === false) {
-        removeFromZinreloCustomerGroup(rewardInfo.reward_id);
+        removeCouponToCart(rewardInfo);
         error = true;
         errorMessage = Resource.msg('error.unable.to.add.zinrelo.coupon.with.another.coupon', 'cart', null);
-    } else {
-        setRewardToProfile(rewardInfo, transactionID);
     }
-
-    result = {
-        error: error,
-        errorMessage: errorMessage,
-        basketModel: new CartModel(currentBasket)
-
-    };
-
-    return result;
-}
-
-/**
- * Removes coupon code from basket
- * @param {Object} rewardInfo reward info object
- * @returns {Object} result
- */
-function removeCouponToCart(rewardInfo) {
-    var error = false;
-    var errorMessage;
-    var result = {};
-
-    var currentBasket = BasketMgr.getCurrentBasket();
-    if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
-        return result;
-    }
-
-    removeFromZinreloCustomerGroup(rewardInfo.reward_id);
-    var couponLineItem = currentBasket.getCouponLineItem(rewardInfo.coupon_code);
-
-    if (couponLineItem) {
-        Transaction.wrap(function () {
-            currentBasket.removeCouponLineItem(couponLineItem);
-            basketCalculationHelpers.calculateTotals(currentBasket);
-        });
-    }
-    removeRewardsFromProfile(rewardInfo);
 
     result = {
         error: error,
