@@ -100,6 +100,130 @@ function isAlreadyRedeemed(couponCode) {
 }
 
 /**
+ * sets the reward from profile
+ * @param {Object} rewardInfo reward details
+ * @param {string} transactionID transaction details
+ */
+function setRewardToProfile(rewardInfo, transactionID) {
+    var rewardData = {
+        reward_id: rewardInfo.reward_id,
+        coupon_code: rewardInfo.coupon_code,
+        time: new Date().getTime(),
+        transactionID: transactionID
+    };
+
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
+
+    if (profileReward) {
+        try {
+            profileReward = JSON.parse(profileReward);
+        } catch (error) {
+            profileReward = [];
+        }
+    } else {
+        profileReward = [];
+    }
+
+    Transaction.wrap(function () {
+        profileReward.push(rewardData);
+        request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
+    });
+}
+
+/**
+ * Rejects the reward from profile
+ * @param {Object} rewardInfo reward details
+ */
+function removeRewardsFromProfile(rewardInfo) {
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
+
+    if (profileReward) {
+        var profileRewardList = JSON.parse(profileReward);
+
+        profileRewardList.forEach(function (reward, index) {
+            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id) {
+                profileRewardList.splice(index, 1);
+            }
+        });
+
+        Transaction.wrap(function () {
+            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileRewardList);
+        });
+    }
+}
+
+/**
+ * Adds user in Zinrelo rewards customer group by adding reward id to session attribute
+ * @param {string} rewardID reward id
+ */
+function addInZinreloCustomerGroup(rewardID) {
+    // Get rewards from session
+    var zinreloRewards = getApplicableZinreloRewards();
+
+    // Add the current rewards
+    zinreloRewards.push(rewardID);
+
+    // Set the updated list back to session
+    setApplicableZinreloRewards(zinreloRewards);
+}
+
+/**
+ * Removes user from Zinrelo rewards customer group by removing reward id to session attribute
+ * @param {string} rewardID reward id
+ */
+function removeFromZinreloCustomerGroup(rewardID) {
+    // Get rewards from session
+    var zinreloRewards = getApplicableZinreloRewards();
+
+    // Remove the current rewards
+    var currentRewardIndex = zinreloRewards.indexOf(rewardID);
+    if (currentRewardIndex > -1) {
+        zinreloRewards.splice(currentRewardIndex, 1);
+    }
+
+    // Set the updated list back to session
+    setApplicableZinreloRewards(zinreloRewards);
+}
+
+/**
+ * Removes coupon code from basket
+ * @param {Object} rewardInfo reward info object
+ * @returns {Object} result
+ */
+function removeCouponToCart(rewardInfo) {
+    var error = false;
+    var errorMessage;
+    var result = {};
+
+    var currentBasket = BasketMgr.getCurrentBasket();
+    if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
+        return result;
+    }
+
+    removeFromZinreloCustomerGroup(rewardInfo.reward_id);
+    var couponLineItem = currentBasket.getCouponLineItem(rewardInfo.coupon_code);
+
+    if (couponLineItem) {
+        Transaction.wrap(function () {
+            currentBasket.removeCouponLineItem(couponLineItem);
+            basketCalculationHelpers.calculateTotals(currentBasket);
+        });
+    }
+    removeRewardsFromProfile(rewardInfo);
+
+    result = {
+        error: error,
+        errorMessage: errorMessage,
+        basketModel: new CartModel(currentBasket)
+
+    };
+
+    return result;
+}
+
+/**
  * Gets zinrelo rewards from provided or current basket
  * @param {dw.order.Basket} basket basket object
  * @returns {Array} list of zinrelo rewards from basket
@@ -186,131 +310,6 @@ function getInCartRedemptionData(customer) {
     }
 
     return inCartRedemptionData;
-}
-
-/**
- * Adds user in Zinrelo rewards customer group by adding reward id to session attribute
- * @param {string} rewardID reward id
- */
-function addInZinreloCustomerGroup(rewardID) {
-    // Get rewards from session
-    var zinreloRewards = getApplicableZinreloRewards();
-
-    // Add the current rewards
-    zinreloRewards.push(rewardID);
-
-    // Set the updated list back to session
-    setApplicableZinreloRewards(zinreloRewards);
-}
-
-/**
- * Removes user from Zinrelo rewards customer group by removing reward id to session attribute
- * @param {string} rewardID reward id
- */
-function removeFromZinreloCustomerGroup(rewardID) {
-    // Get rewards from session
-    var zinreloRewards = getApplicableZinreloRewards();
-
-    // Remove the current rewards
-    var currentRewardIndex = zinreloRewards.indexOf(rewardID);
-    if (currentRewardIndex > -1) {
-        zinreloRewards.splice(currentRewardIndex, 1);
-    }
-
-    // Set the updated list back to session
-    setApplicableZinreloRewards(zinreloRewards);
-}
-
-/**
- * sets the reward from profile
- * @param {Object} rewardInfo reward details
- * @param {string} transactionID transaction details
- */
-function setRewardToProfile(rewardInfo, transactionID) {
-    var rewardData = {
-        reward_id: rewardInfo.reward_id,
-        coupon_code: rewardInfo.coupon_code,
-        time: new Date().getTime(),
-        transactionID: transactionID
-    };
-
-    var customer = request.session.customer;
-    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
-
-    if (profileReward) {
-        try {
-            profileReward = JSON.parse(profileReward);
-        } catch (error) {
-            profileReward = [];
-        }
-    } else {
-        profileReward = [];
-    }
-
-    Transaction.wrap(function () {
-        profileReward.push(rewardData);
-        request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileReward);
-    });
-}
-
-/**
- * Rejects the reward from profile
- * @param {Object} rewardInfo reward details
- */
-function removeRewardsFromProfile(rewardInfo) {
-    var customer = request.session.customer;
-    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
-
-    if (profileReward) {
-        var profileRewardList = JSON.parse(profileReward);
-
-        profileRewardList.forEach(function (reward, index) {
-            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id) {
-                profileRewardList.splice(index, 1);
-            }
-        });
-
-        Transaction.wrap(function () {
-            request.session.customer.profile.getCustom().rewardInfo = JSON.stringify(profileRewardList);
-        });
-    }
-}
-
-
-/**
- * Removes coupon code from basket
- * @param {Object} rewardInfo reward info object
- * @returns {Object} result
- */
-function removeCouponToCart(rewardInfo) {
-    var error = false;
-    var errorMessage;
-    var result = {};
-
-    var currentBasket = BasketMgr.getCurrentBasket();
-    if (!currentBasket || !rewardInfo || (rewardInfo && (!rewardInfo.reward_id || !rewardInfo.coupon_code))) {
-        return result;
-    }
-
-    removeFromZinreloCustomerGroup(rewardInfo.reward_id);
-    var couponLineItem = currentBasket.getCouponLineItem(rewardInfo.coupon_code);
-
-    if (couponLineItem) {
-        Transaction.wrap(function () {
-            currentBasket.removeCouponLineItem(couponLineItem);
-            basketCalculationHelpers.calculateTotals(currentBasket);
-        });
-    }
-    removeRewardsFromProfile(rewardInfo);
-
-    result = {
-        error: error,
-        errorMessage: errorMessage,
-        basketModel: new CartModel(currentBasket)
-
-    };
-
-    return result;
 }
 
 /**
