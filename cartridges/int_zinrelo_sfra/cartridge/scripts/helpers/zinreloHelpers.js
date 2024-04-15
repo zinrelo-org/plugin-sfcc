@@ -139,6 +139,7 @@ function rewardSync() {
                     customer: request.session.customer.profile
                 };
                 zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+                removeCouponToCart(reward);
             }
         });
     }
