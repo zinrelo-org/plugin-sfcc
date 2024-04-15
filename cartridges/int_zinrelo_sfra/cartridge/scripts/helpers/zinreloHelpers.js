@@ -100,127 +100,6 @@ function isAlreadyRedeemed(couponCode) {
 }
 
 /**
- * Gets zinrelo rewards from provided or current basket
- * @param {dw.order.Basket} basket basket object
- * @returns {Array} list of zinrelo rewards from basket
- */
-function getRewardsFromBasket(basket) {
-    var rewardsInBasket = [];
-    var currentBasket = basket || BasketMgr.getCurrentBasket();
-
-    if (!currentBasket) {
-        return rewardsInBasket;
-    }
-
-    collections.forEach(currentBasket.couponLineItems, function (couponLineItem) {
-        if (couponLineItem.custom.isZinreloCoupon && couponLineItem.custom.zinreloRewardID && couponLineItem.applied) {
-            rewardsInBasket.push(couponLineItem.custom.zinreloRewardID);
-        }
-    });
-
-    return rewardsInBasket;
-}
-
-/**
- * sync the couponLineItems with zinrelo rewards
- */
-function rewardSync() {
-    var customer = request.session.customer;
-    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
-
-    if (profileReward) {
-        var profileRewardList = JSON.parse(profileReward);
-        var rewardsInBasket = getRewardsFromBasket();
-
-        profileRewardList.forEach(function (reward) {
-            if (rewardsInBasket.indexOf(reward.reward_id) < 0) {
-                var rewardRedeemOptions = {
-                    transactionId: reward.transactionID,
-                    customer: request.session.customer.profile
-                };
-                zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
-            }
-        });
-    }
-}
-
-/**
- * Generates data for in cart redemption
- * @param {Object} customer current customer object
- * @returns {Object} in cart redemption data
- */
-function getInCartRedemptionData(customer) {
-    var inCartRedemptionData = {};
-
-    // sync the couponLineItems with zinrelo rewards
-    rewardSync();
-
-    const isInCartRedemptionEnabled = zinreloPreferencesHelpers.isInCartRedemptionEnabled();
-    inCartRedemptionData.isInCartRedemptionEnabled = isInCartRedemptionEnabled;
-
-    if (customer && customer.raw && customer.raw.profile && isInCartRedemptionEnabled) {
-        // Get loyalty points for current customer from zinrelo
-        var inCartRedemptionText = zinreloContentHelpers.getInCartRedemptionText();
-        var memberData = zinreloLoyaltyServiceHelpers.getMemberData(customer.raw.profile);
-        var availablePoints = (memberData && memberData.availablePoints) || 0;
-        inCartRedemptionText = inCartRedemptionText.replace(/{{AVAILABLE_POINTS}}/g, availablePoints);
-
-        // Get available rewards for current customer from zinrelo
-        var zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
-        inCartRedemptionData.zinreloRewards = zinreloRewards;
-        inCartRedemptionData.inCartDropdownText = zinreloContentHelpers.getInCartDropdownText();
-        inCartRedemptionData.inCartRedemptionText = inCartRedemptionText;
-
-        // Get pending transactions for current customer from zinrelo
-        var transactionStatusList = [ZINRELO_REWARD_PENDING_STATUS];
-        var pendingTransactions = zinreloLoyaltyServiceHelpers.getMemberTransactions(customer.raw.profile, transactionStatusList);
-        var pendingRewards = getPendingRewards(pendingTransactions);
-        inCartRedemptionData.pendingRewards = pendingRewards;
-
-        // Buttons text
-        inCartRedemptionData.inCartRedeemButtonText = zinreloContentHelpers.getInCartRedeemButtonText();
-        inCartRedemptionData.inCartCancelButtonText = zinreloContentHelpers.getInCartCancelButtonText();
-
-        inCartRedemptionData.showInCartSection = !!((zinreloRewards && zinreloRewards.length > 0) || (pendingRewards && pendingRewards.length > 0));
-    }
-
-    return inCartRedemptionData;
-}
-
-/**
- * Adds user in Zinrelo rewards customer group by adding reward id to session attribute
- * @param {string} rewardID reward id
- */
-function addInZinreloCustomerGroup(rewardID) {
-    // Get rewards from session
-    var zinreloRewards = getApplicableZinreloRewards();
-
-    // Add the current rewards
-    zinreloRewards.push(rewardID);
-
-    // Set the updated list back to session
-    setApplicableZinreloRewards(zinreloRewards);
-}
-
-/**
- * Removes user from Zinrelo rewards customer group by removing reward id to session attribute
- * @param {string} rewardID reward id
- */
-function removeFromZinreloCustomerGroup(rewardID) {
-    // Get rewards from session
-    var zinreloRewards = getApplicableZinreloRewards();
-
-    // Remove the current rewards
-    var currentRewardIndex = zinreloRewards.indexOf(rewardID);
-    if (currentRewardIndex > -1) {
-        zinreloRewards.splice(currentRewardIndex, 1);
-    }
-
-    // Set the updated list back to session
-    setApplicableZinreloRewards(zinreloRewards);
-}
-
-/**
  * sets the reward from profile
  * @param {Object} rewardInfo reward details
  * @param {string} transactionID transaction details
@@ -275,6 +154,38 @@ function removeRewardsFromProfile(rewardInfo) {
     }
 }
 
+/**
+ * Adds user in Zinrelo rewards customer group by adding reward id to session attribute
+ * @param {string} rewardID reward id
+ */
+function addInZinreloCustomerGroup(rewardID) {
+    // Get rewards from session
+    var zinreloRewards = getApplicableZinreloRewards();
+
+    // Add the current rewards
+    zinreloRewards.push(rewardID);
+
+    // Set the updated list back to session
+    setApplicableZinreloRewards(zinreloRewards);
+}
+
+/**
+ * Removes user from Zinrelo rewards customer group by removing reward id to session attribute
+ * @param {string} rewardID reward id
+ */
+function removeFromZinreloCustomerGroup(rewardID) {
+    // Get rewards from session
+    var zinreloRewards = getApplicableZinreloRewards();
+
+    // Remove the current rewards
+    var currentRewardIndex = zinreloRewards.indexOf(rewardID);
+    if (currentRewardIndex > -1) {
+        zinreloRewards.splice(currentRewardIndex, 1);
+    }
+
+    // Set the updated list back to session
+    setApplicableZinreloRewards(zinreloRewards);
+}
 
 /**
  * Removes coupon code from basket
@@ -310,6 +221,95 @@ function removeCouponToCart(rewardInfo) {
     };
 
     return result;
+}
+
+/**
+ * Gets zinrelo rewards from provided or current basket
+ * @param {dw.order.Basket} basket basket object
+ * @returns {Array} list of zinrelo rewards from basket
+ */
+function getRewardsFromBasket(basket) {
+    var rewardsInBasket = [];
+    var currentBasket = basket || BasketMgr.getCurrentBasket();
+
+    if (!currentBasket) {
+        return rewardsInBasket;
+    }
+
+    collections.forEach(currentBasket.couponLineItems, function (couponLineItem) {
+        if (couponLineItem.custom.isZinreloCoupon && couponLineItem.custom.zinreloRewardID && couponLineItem.applied) {
+            rewardsInBasket.push(couponLineItem.custom.zinreloRewardID);
+        }
+    });
+
+    return rewardsInBasket;
+}
+
+/**
+ * sync the couponLineItems with zinrelo rewards
+ */
+function rewardSync() {
+    var customer = request.session.customer;
+    var profileReward = customer && customer.profile && customer.profile.getCustom().rewardInfo;
+
+    if (profileReward) {
+        var profileRewardList = JSON.parse(profileReward);
+        var rewardsInBasket = getRewardsFromBasket();
+
+        profileRewardList.forEach(function (reward) {
+            if (rewardsInBasket.indexOf(reward.reward_id) < 0) {
+                var rewardRedeemOptions = {
+                    transactionId: reward.transactionID,
+                    customer: request.session.customer.profile
+                };
+                zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
+                removeCouponToCart(reward);
+            }
+        });
+    }
+}
+
+/**
+ * Generates data for in cart redemption
+ * @param {Object} customer current customer object
+ * @returns {Object} in cart redemption data
+ */
+function getInCartRedemptionData(customer) {
+    var inCartRedemptionData = {};
+
+    // sync the couponLineItems with zinrelo rewards
+    rewardSync();
+
+    const isInCartRedemptionEnabled = zinreloPreferencesHelpers.isInCartRedemptionEnabled();
+    inCartRedemptionData.isInCartRedemptionEnabled = isInCartRedemptionEnabled;
+
+    if (customer && customer.raw && customer.raw.profile && isInCartRedemptionEnabled) {
+        // Get loyalty points for current customer from zinrelo
+        var inCartRedemptionText = zinreloContentHelpers.getInCartRedemptionText();
+        var memberData = zinreloLoyaltyServiceHelpers.getMemberData(customer.raw.profile);
+        var availablePoints = (memberData && memberData.availablePoints) || 0;
+        inCartRedemptionText = inCartRedemptionText.replace(/{{AVAILABLE_POINTS}}/g, availablePoints);
+
+        // Get available rewards for current customer from zinrelo
+        var zinreloRewards = zinreloLoyaltyServiceHelpers.getRewards(customer.raw.profile);
+        inCartRedemptionData.zinreloRewards = zinreloRewards;
+        inCartRedemptionData.inCartDropdownText = zinreloContentHelpers.getInCartDropdownText();
+        inCartRedemptionData.inCartRedemptionText = inCartRedemptionText;
+
+        // Get pending transactions for current customer from zinrelo
+        var transactionStatusList = [ZINRELO_REWARD_PENDING_STATUS];
+        var pendingTransactions = zinreloLoyaltyServiceHelpers.getMemberTransactions(customer.raw.profile, transactionStatusList);
+        var pendingRewards = getPendingRewards(pendingTransactions);
+        inCartRedemptionData.pendingRewards = pendingRewards;
+
+        // Buttons text
+        inCartRedemptionData.inCartRedeemButtonText = zinreloContentHelpers.getInCartRedeemButtonText();
+        inCartRedemptionData.inCartCancelButtonText = zinreloContentHelpers.getInCartCancelButtonText();
+
+        inCartRedemptionData.showInCartSection = !!((zinreloRewards && zinreloRewards.length > 0) || (pendingRewards && pendingRewards.length > 0));
+    }
+
+    return inCartRedemptionData;
 }
 
 /**
