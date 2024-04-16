@@ -143,7 +143,7 @@ function removeRewardsFromProfile(rewardInfo) {
         var profileRewardList = JSON.parse(profileReward);
 
         profileRewardList.forEach(function (reward, index) {
-            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id) {
+            if (reward && rewardInfo && reward.reward_id && rewardInfo.reward_id && reward.reward_id === rewardInfo.reward_id) {
                 profileRewardList.splice(index, 1);
             }
         });
