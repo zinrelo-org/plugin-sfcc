@@ -40,7 +40,8 @@ function getRewards(customer) {
     if (customer && customer.email) {
         var zinreloMemberID = zinreloUserAuthHelpers.getZinreloMemberID(customer);
         var preferredLanguage = customer.custom.zinreloPreferredLanguage || zinreloUserAuthHelpers.getCurrentLocaleLanguage();
-        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID, preferredLanguage);
+        var customerPreferredLanguage = preferredLanguage.replace(/\s/g, '%20');
+        var rewardsAPIConfig = getRewardsAPIConfigs(zinreloMemberID, customerPreferredLanguage);
         var loyaltyRewardsService = createZinreloLoyaltyService(rewardsAPIConfig);
 
         // Prepare payload
