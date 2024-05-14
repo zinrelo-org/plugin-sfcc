@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+.vscode/
+cartridges/int_zinrelo_sfra/cartridge/static/
+package-lock.json
+dw.json
+.DS_STORE

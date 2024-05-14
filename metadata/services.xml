@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
+    <service-credential service-credential-id="int_zinrelo.http.loyalty.service.credentials">
+        <url>https://api.zinrelo.com/v2/loyalty/</url>
+        <user-id/>
+        <password encrypted="true" encryption-type="common.export"></password>
+    </service-credential>
+
+    <service-credential service-credential-id="int_zinrelo.http.webhook.processorder">
+        <url/>
+        <user-id/>
+        <password encrypted="true" encryption-type="common.export"></password>
+    </service-credential>
+
+    <service-credential service-credential-id="account.manager.generate.token.credentials">
+        <url>https://account.demandware.com/dwsso/oauth2/access_token</url>
+        <user-id />
+        <password encrypted="true" encryption-type="common.export"></password>
+    </service-credential>
+
+    <service-credential service-credential-id="https.ocapi.delete.coupon.credentials">
+        <url/>
+        <user-id/>
+        <password encrypted="true" encryption-type="common.export"></password>
+    </service-credential>
+
+    <service-profile service-profile-id="int_zinrelo.http.loyalty.service.profile">
+        <timeout-millis>1000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>true</cb-enabled>
+        <cb-calls>0</cb-calls>
+        <cb-millis>0</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="int_zinrelo.http.webhook.processorder">
+        <timeout-millis>1000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>true</cb-enabled>
+        <cb-calls>0</cb-calls>
+        <cb-millis>0</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="account.manager.generate.token.profile">
+        <timeout-millis>3000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>true</cb-enabled>
+        <cb-calls>0</cb-calls>
+        <cb-millis>0</cb-millis>
+    </service-profile>
+
+    <service-profile service-profile-id="https.ocapi.delete.coupon.profile">
+        <timeout-millis>3000</timeout-millis>
+        <rate-limit-enabled>false</rate-limit-enabled>
+        <rate-limit-calls>0</rate-limit-calls>
+        <rate-limit-millis>0</rate-limit-millis>
+        <cb-enabled>true</cb-enabled>
+        <cb-calls>0</cb-calls>
+        <cb-millis>0</cb-millis>
+    </service-profile>
+
+    <service service-id="int_zinrelo.http.loyalty.service">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>ZIN_LOYALTY</log-prefix>
+        <comm-log-enabled>true</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>int_zinrelo.http.loyalty.service.profile</profile-id>
+        <credential-id>int_zinrelo.http.loyalty.service.credentials</credential-id>
+    </service>
+
+    <service service-id="int_zinrelo.http.webhook.processorder">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>int_zinrelo_http_webhook</log-prefix>
+        <comm-log-enabled>true</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>int_zinrelo.http.webhook.processorder</profile-id>
+        <credential-id>int_zinrelo.http.webhook.processorder</credential-id>
+    </service>
+
+    <service service-id="account.manager.generate.token">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix/>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>account.manager.generate.token.profile</profile-id>
+        <credential-id>account.manager.generate.token.credentials</credential-id>
+    </service>
+
+    <service service-id="https.ocapi.delete.coupon">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix/>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>https.ocapi.delete.coupon.profile</profile-id>
+        <credential-id>https.ocapi.delete.coupon.credentials</credential-id>
+    </service>
+
+</services>
