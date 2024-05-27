@@ -19,7 +19,7 @@ function updateOrders(orders, status) {
             var currentZinreloOrderStatus = order.custom.zinreloOrderStatus || '';
             var statusList = currentZinreloOrderStatus ? currentZinreloOrderStatus.split(',') : [];
             statusList.push(status);
-            order.custom.zinreloOrderStatus = statusList.join(',');
+            order.getCustom().zinreloOrderStatus = statusList.join(',');
             updatedOrders.push(order.orderNo);
         });
     });
