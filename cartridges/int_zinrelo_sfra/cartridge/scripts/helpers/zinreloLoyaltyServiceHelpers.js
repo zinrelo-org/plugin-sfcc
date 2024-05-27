@@ -144,7 +144,9 @@ function getMemberTransactions(customer, transationStatusList) {
 
         if (response && response.object) {
             var { data } = JSON.parse(response.object);
-            transactions = data.transactions;
+            if (data.transactions) {
+                transactions = data.transactions;
+            }
         }
     }
 

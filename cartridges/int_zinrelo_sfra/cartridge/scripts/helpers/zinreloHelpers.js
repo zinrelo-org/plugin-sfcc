@@ -93,8 +93,11 @@ function isZinreloCouponCode(couponCode) {
  * @returns {boolean} whether the code is redeemed
  */
 function isAlreadyRedeemed(couponCode) {
+    var couponRedemption = [];
     var coupon = CouponMgr.getCouponByCode(couponCode);
-    var couponRedemption = CouponMgr.getRedemption(coupon.ID, couponCode);
+    if (coupon) {
+        couponRedemption = CouponMgr.getRedemption(coupon.ID, couponCode);
+    }
 
     return (couponRedemption.length > MAX_REDEMPTIONS_PER_COUPON);
 }
@@ -454,7 +457,7 @@ function redeemReward(customer, rewardsForm) {
  */
 function rejectRewardTransaction(customer, rewardsForm) {
     var rewardRedeemOptions = {
-        transactionId: rewardsForm.transactionId,
+        transactionId: rewardsForm && rewardsForm.transactionId,
         customer: customer && customer.raw && customer.raw.profile
     };
     var result = zinreloLoyaltyServiceHelpers.rejectZinreloRewardTransaction(rewardRedeemOptions);
@@ -517,15 +520,15 @@ function approveAllRewards(customer, orderNumber) {
     var transactionStatusList = [ZINRELO_REWARD_PENDING_STATUS];
     var pendingTransactions = zinreloLoyaltyServiceHelpers.getMemberTransactions(customer.raw.profile, transactionStatusList);
     var appliedRewardsInBasket = filterTransactionsForBasketRewards(pendingTransactions, order);
-    appliedRewardsInBasket.forEach(function (transaction) {
-        transactionOptions.transactionId = transaction.id;
+    for (let index = 0; index < appliedRewardsInBasket.length; index += 1) {
+        transactionOptions.transactionId = appliedRewardsInBasket[index].id;
         var result = zinreloLoyaltyServiceHelpers.approveZinreloRewardTransaction(transactionOptions);
 
         if (result && result.success) {
             // Remove this reward from user's profile
-            removeRewardsFromProfile(transaction.reward_info);
+            removeRewardsFromProfile(appliedRewardsInBasket[index].reward_info);
         }
-    });
+    }
 }
 
 module.exports = {
