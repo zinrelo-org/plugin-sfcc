@@ -38,11 +38,13 @@ function getZinreloMemberID(customer) {
  * @returns {Object} user data for JWT
  */
 function generateUserDataForJWT(customer) {
+    const { getAPIKeyIdentifier } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
     var userData = {};
 
     if (customer) {
         userData = {
             member_id: getZinreloMemberID(customer),
+            sub: getAPIKeyIdentifier(),
             email_address: customer.email,
             first_name: customer.firstName || '',
             last_name: customer.lastName || '',
