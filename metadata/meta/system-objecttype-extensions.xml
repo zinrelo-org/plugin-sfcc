@@ -158,6 +158,13 @@
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
             </attribute-definition>
+            <attribute-definition attribute-id="zinreloAPIKeyIdentifier">
+                <display-name xml:lang="x-default">Zinrelo API Key Identifier</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
             <attribute-definition attribute-id="zinreloCartSessionTimeout">
                 <display-name xml:lang="x-default">Cart Session Timeout (In minutes)</display-name>
                 <type>int</type>
@@ -236,6 +243,7 @@
                 <attribute attribute-id="zinreloEnableLoyalty"/>
                 <attribute attribute-id="zinreloPartnerID"/>
                 <attribute attribute-id="zinreloAPIKey"/>
+                <attribute attribute-id="zinreloAPIKeyIdentifier"/>
                 <attribute attribute-id="zinreloWebhookURL"/>
                 <attribute attribute-id="zinreloEnableInCartRedemption"/>
                 <attribute attribute-id="zinreloEnableRewardsOnPDP"/>
