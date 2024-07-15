@@ -38,6 +38,15 @@ function getAPIKey() {
 }
 
 /**
+ * Gets API key from the preferences
+ * @returns {string} API key identifier
+ */
+function getAPIKeyIdentifier() {
+    var apiKey = currentSite.getCustomPreferenceValue('zinreloAPIKeyIdentifier') || '';
+    return apiKey;
+}
+
+/**
  * Checks whether Zinrelo is enabled in the preferences or not
  * @returns {boolean} whether Zinrelo is enabled
  */
@@ -110,5 +119,6 @@ module.exports = {
     isZinreloRewardsEnabledOnPDP: isZinreloRewardsEnabledOnPDP,
     isZinreloOrderCreationEventEnabled: isZinreloOrderCreationEventEnabled,
     isZinreloOrderPlacedEventEnabled: isZinreloOrderPlacedEventEnabled,
-    getZinreloCartSessionTimeout: getZinreloCartSessionTimeout
+    getZinreloCartSessionTimeout: getZinreloCartSessionTimeout,
+    getAPIKeyIdentifier: getAPIKeyIdentifier
 };
