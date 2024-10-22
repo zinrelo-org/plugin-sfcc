@@ -1,6 +1,7 @@
 'use strict';
 
 const Transaction = require('dw/system/Transaction');
+var Logger = require('dw/system/Logger');
 /**
  * Save orders and status to update custom status of zinreloOrderStatus.
  *
@@ -74,6 +75,8 @@ function sendOrderEventToZinrelo(orderNumber, status) {
     if (response.status === 'OK') {
         var orders = [order];
         updateOrders(orders, status);
+    }  else {
+        Logger.getLogger('zinreloCatridgeLogs').error('Zinrelo webhook error response_status: {0} eventPayload: {1}', response.status, JSON.stringify(orderEventPayload));
     }
 }
 

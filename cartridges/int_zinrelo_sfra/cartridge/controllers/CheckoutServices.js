@@ -2,6 +2,7 @@
 
 var server = require('server');
 server.extend(module.superModule);
+var Logger = require('dw/system/Logger');
 
 server.prepend('PlaceOrder', function (req, res, next) {
     var zinreloHelper = require('*/cartridge/scripts/helpers/zinreloHelpers');
@@ -16,6 +17,7 @@ server.append('PlaceOrder', function (req, res, next) {
     const { isZinreloEnabled, isZinreloOrderCreationEventEnabled, isZinreloOrderPlacedEventEnabled } = require('*/cartridge/scripts/helpers/zinreloPreferencesHelpers');
 
     var viewData = res.getViewData();
+    Logger.getLogger('zinreloCatridgeLogs').info('Zinrelo placeorder orderID: {0}', JSON.stringify(viewData));
     if (isZinreloEnabled && !viewData.error && viewData.orderID) {
         var orderNumber = viewData.orderID;
 
